@@ -1,7 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "filereader.c"
-#include "graph.c"
 
 int main() //
 {

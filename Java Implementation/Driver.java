@@ -1,12 +1,70 @@
+import java.util.*;
+import java.io.*;
+
 public class Driver {
     public static void main(String[] args) {
-        int choice = 0;
+        int choice = 0, graphChoice = 0, ID1, ID2;
+        boolean fileFound = false;
+        String fileString = "";
+        File file;
+        Scanner sc = new Scanner(System.in);
+        AdjacencyMatrix adjacencyMatrix = null;
+        AdjacencyList adjacencyList = null;
 
-        /*
-            Planning to do both implementations. Maybe ask for an option to either use adjacency list or adjacency matrix when loading the file.
-        */
+        // This is the main menu of the program.
+        // Add a part here that allows the user to import a .txt file containing data for a social graph.
+        // If the .txt file is not found, display an error message, BUT not exit the program.
+        // If the .txt file is found, display a success message, and prompt the user to choose between an
+        // ADJACENCY LIST or MATRIX for the social graph.
+        // Choosing either will display the social graph in the chosen format, and will prompt the user to the main menu.
 
-    //main menu
+        while (fileFound == false) {
+            System.out.println("\n\t==== LOAD GRAPH DATA ====\n");
+            System.out.println("Please indicate the ABSOLUTE file path or file name of the .txt file containing the social graph data.");
+            System.out.print("If entering file name, ensure that the file is in the same directory as this program.\n");
+            System.out.print("Enter file path or file name: ");
+            fileString = sc.nextLine();
+
+            file = new File(fileString);
+            if(file.exists() && !file.isDirectory()) {
+                System.out.println("File found.");
+                fileFound = true;
+            } else {
+                System.out.println("File not found. Please try again.");
+            }
+        }
+
+        // Add a part here that allows the user to choose between an ADJACENCY LIST or MATRIX for the social graph.
+        while (graphChoice != 1 && graphChoice != 2) {
+            System.out.println("\n\t==== CHOOSING A GRAPH FORMAT ====\n");
+            System.out.println("Please choose the format of the social graph.");
+            System.out.println("[1] Adjacency List.");
+            System.out.println("[2] Matrix.\n");
+            System.out.print("Enter choice: ");
+            
+            try {
+                graphChoice = Integer.parseInt(System.console().readLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please try again.");
+                continue;
+            }
+
+            switch(graphChoice) {
+                case 1:
+                    System.out.println("WIP.");
+                    adjacencyList = new AdjacencyList();
+                    break;
+                case 2:
+                    adjacencyMatrix = new AdjacencyMatrix();
+                    adjacencyMatrix.loadFromFile(fileString);
+                    // adjacencyMatrix.printAdjacencyMatrix();
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+
+        //main menu
         while (choice != 3) {
             System.out.println("\n\t==== MAIN MENU ====\n");
             System.out.println("[1] Display friend list.");
@@ -28,6 +86,12 @@ public class Driver {
                         If valid, display total number of friends and list of friends.
                         If not, display an error message, BUT not exit the program.
                     */  
+                    System.out.print("Enter ID number: ");
+                    ID1 = Integer.parseInt(System.console().readLine());
+                    if (graphChoice == 2) {
+                        adjacencyMatrix.printFriendList(ID1);
+                    }
+                    
                     break;
                 case 2:
                     /*
@@ -49,5 +113,7 @@ public class Driver {
                     System.out.println("Invalid choice. Please try again.");
             }
         }
+
+        sc.close();
     }
 }
