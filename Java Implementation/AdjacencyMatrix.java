@@ -11,6 +11,10 @@ public class AdjacencyMatrix {
         this.numEdges = 0;
         this.adjacencyMatrix = null;
     }
+    
+    public int getNumVertices (){
+        return this.numVertices;
+    } 
 
     public boolean hasEdge(int i, int j) {
         return adjacencyMatrix[i][j] && adjacencyMatrix[j][i];
