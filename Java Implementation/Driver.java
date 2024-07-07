@@ -1,15 +1,16 @@
-import java.util.*;
-import java.io.*;
+import java.util.*; //Scanner, List Interface
+import java.io.*; //File Class
 
 public class Driver {
     public static void main(String[] args) {
-        int choice = 0, graphChoice = 0, ID1, ID2;
+        int i, choice = 0, graphChoice = 0, searchChoice = 0,ID1, ID2;
         boolean fileFound = false;
         String fileString = "";
         File file;
         Scanner sc = new Scanner(System.in);
         AdjacencyMatrix adjacencyMatrix = null;
         AdjacencyList adjacencyList = null;
+        List<Integer> connection = new ArrayList<Integer>();
 
         // This is the main menu of the program.
         // Add a part here that allows the user to import a .txt file containing data for a social graph.
@@ -20,9 +21,9 @@ public class Driver {
 
         while (fileFound == false) {
             System.out.println("\n\t==== LOAD GRAPH DATA ====\n");
-            System.out.println("Please indicate the ABSOLUTE file path or file name of the .txt file containing the social graph data.");
+            System.out.println("Please indicate the ABSOLUTE file connection or file name of the .txt file containing the social graph data.");
             System.out.print("If entering file name, ensure that the file is in the same directory as this program.\n");
-            System.out.print("Enter file path or file name: ");
+            System.out.print("Enter file connection or file name: ");
             fileString = sc.nextLine();
 
             file = new File(fileString);
@@ -88,7 +89,9 @@ public class Driver {
                     */  
                     System.out.print("Enter ID number: ");
                     ID1 = Integer.parseInt(System.console().readLine());
-                    if (graphChoice == 2) {
+                    if (graphChoice == 1) {
+                        
+                    } else if (graphChoice == 2) {
                         adjacencyMatrix.printFriendList(ID1);
                     }
                     
@@ -96,7 +99,7 @@ public class Driver {
                 case 2:
                     /*
                         This function accepts 2 different ID numbers as parameters.
-                        If both ID numbers exist, display the connection/path between the two, i.e, ID1 is friends with c1, until c(n-1) is friends with ID2.
+                        If both ID numbers exist, display the connection/connection between the two, i.e, ID1 is friends with c1, until c(n-1) is friends with ID2.
                         
                         Note: 
                         - A connection is a sequence from ID1, c1, c2, ..., ID2 such that ID1 is friends with c1, 
@@ -104,6 +107,33 @@ public class Driver {
 
                         If any/both ID numbers does not exist, display an error message, BUT not exit the program.
                     */
+                    System.out.print("Enter ID number 1: ");
+                    ID1 = Integer.parseInt(System.console().readLine());
+                    System.out.print("Enter ID number 2: ");
+                    ID2 = Integer.parseInt(System.console().readLine());
+                    System.out.println("\nChoose the search method: ");
+                    System.out.println("[1] Breadth First Search.");
+                    System.out.println("[2] Depth First Search.");
+                    System.out.print("\nEnter choice: ");
+                    searchChoice = Integer.parseInt(System.console().readLine());
+                    if (graphChoice == 1) {
+                        
+                    } else if (graphChoice == 2) {
+                        if (searchChoice == 1) {
+                            System.out.printf("\nPerforming BFS on the graph from %d to %d...\n", ID1, ID2);
+                            connection = adjacencyMatrix.printConnections_BFS(ID1, ID2);
+                            if (connection != null) {
+                                System.out.printf("A connection from IDs %d to %d EXISTS!\n", ID1, ID2);
+                                for (i = 0; i < connection.size() - 1; i++) {
+                                    System.out.printf("%d is friends with %d.\n", connection.get(i), connection.get(i + 1));
+                                }
+                                System.out.println();
+                            }
+                        } else if (searchChoice == 2) {
+                            System.out.printf("\nPerforming DFS on the graph from %d to %d...\n", ID1, ID2);
+                            adjacencyMatrix.printConnections_DFS(ID1, ID2);;
+                        }
+                    }
                     break;
                 case 3:
                     System.out.println("Exiting program...");
