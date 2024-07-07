@@ -71,7 +71,8 @@ public class AdjacencyMatrix {
         System.out.printf("\n\n%d's Friend Count: %d\n", ID1, friendCount);
     }
 
-    public List<Integer> printConnections_BFS(int ID1, int ID2) { // will use the Queue interface and LinkedList implementation
+    //this method uses a priority queue to implement BFS, as it is a min heap and will always dequeue the vertex with the smallest ID first
+    public List<Integer> printConnections_BFS(int ID1, int ID2) {
         // first, validate ID inputs
         if (ID1 < 0 || ID1 >= this.numVertices || ID2 < 0 || ID2 >= this.numVertices || ID1 == ID2) {
             System.out.printf("Invalid ID/s. The range of an ID should be from 0 to " + (this.numVertices - 1) + " inclusive.\nThe two IDs should also not be the same.\n\n");
@@ -80,7 +81,7 @@ public class AdjacencyMatrix {
 
         int i, currentVertex;
         boolean connectionFound = false;
-        Queue<Integer> queue = new LinkedList<Integer>(); // stores the vertices to be visited next
+        PriorityQueue<Integer> queue = new PriorityQueue<>(); 
         boolean visitedVertices[] = new boolean[this.numVertices]; // keeps track of visited vertices
         int[] parent = new int[this.numVertices]; // keeps track of the parent of each vertex
         Arrays.fill(parent, -1); // initialize all elements of parent to -1 since at the start, we do not know yet the parent of each vertex
