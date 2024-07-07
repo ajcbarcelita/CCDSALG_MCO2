@@ -1,3 +1,120 @@
+import java.util.*; //Scanner, Queue and List Interfaces, LinkedList, and Stack Class
+import java.io.*; //File Class
+
 public class AdjacencyList {
+    private List<Integer>[] adjacencyList;
+    private int numVertices;
+    private int numEdges;
     
+
+    public AdjacencyList(){
+        this.numVertices = 0;
+        this.numEdges = 0;
+        this.adjacencyList = null;
+    }
+    
+    public int getNumVertices(){
+        return this.numVertices;
+    }
+
+    public void loadFromFile(String fileString) { //fileString is either file connection or file name
+        try {
+            Scanner sc = new Scanner(new File(fileString));
+            
+            if (sc.hasNextLine()) {
+                String[] parts = sc.nextLine().split(" ");
+                this.numVertices = Integer.parseInt(parts[0]);
+                this.numEdges = Integer.parseInt(parts[1]);
+                this.adjacencyList = new ArrayList[numVertices];
+                for (int i = 0; i < numVertices; i++) {
+                    adjacencyList[i] = new ArrayList<>();
+                }
+            }
+
+            while (sc.hasNextLine() == true) {
+                String[] edge = sc.nextLine().split(" ");
+                int i = Integer.parseInt(edge[0]);
+                int j = Integer.parseInt(edge[1]);
+                adjacencyList[i].add(j);
+                adjacencyList[j].add(i);
+            }
+            System.out.printf("File loaded successfully. List Graph has %d vertices and %d edges.\n\n", this.numVertices, this.numEdges);
+            sc.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + fileString);
+        }
+    }
+
+    public void printAdjacencyList() { 
+        
+    }
+
+    public void printFriendList(int ID1) { //ID1's friends are the nodes adjacent to it
+        int i, friendCount = 0;
+
+        System.out.printf("\n\t==== %d's FRIEND LIST ====\n\n", ID1);
+        for (i = 0; i < adjacencyList[ID1].size(); i++) {
+                System.out.printf("%d\n", i);
+                friendCount++;
+        }
+        System.out.printf("\n\n%d's Friend Count: %d\n", ID1, friendCount);
+    }
+
+    public List<Integer> printConnections_BFS(int ID1, int ID2) { // will use the Queue interface and LinkedList implementation
+        // first, validate ID inputs
+        if (ID1 < 0 || ID1 >= this.numVertices || ID2 < 0 || ID2 >= this.numVertices || ID1 == ID2) {
+            System.out.printf("Invalid ID/s. The range of an ID should be from 0 to " + (this.numVertices - 1) + " inclusive.\nThe two IDs should also not be the same.\n\n");
+            return null;
+        }
+
+        int i, currentVertex;
+        boolean connectionFound = false;
+        Queue<Integer> queue = new LinkedList<Integer>(); // stores the vertices to be visited next
+        boolean visitedVertices[] = new boolean[this.numVertices]; // keeps track of visited vertices
+        int[] parent = new int[this.numVertices]; // keeps track of the parent of each vertex
+        Arrays.fill(parent, -1); // initialize all elements of parent to -1 since at the start, we do not know yet the parent of each vertex
+
+        //mark the first vertex as visited and enqueue it
+        visitedVertices[ID1] = true;
+        queue.add(ID1);
+
+        // process the vertices in the queue until queue is empty or connection is found
+        while (!queue.isEmpty()) {
+            currentVertex = queue.poll(); // dequeue the vertex at the front of the queue
+            if (currentVertex == ID2) {
+                connectionFound = true;
+                break; // exit the loop if the currentVertex is equal to ID2
+            }
+
+            // Explore unvisited neighboring vertices of the current vertex
+            for (i = 0; i < adjacencyList[currentVertex].size(); i++) {
+                if (!visitedVertices[i]) {
+                    visitedVertices[i] = true;
+                    parent[i] = currentVertex;
+                    queue.add(i);
+                }
+            }
+        }
+
+        // if no connection is found between ID1 and ID2, display an error message
+        if (!connectionFound) {
+            System.out.printf("No connection found between IDs %d and %d.\n", ID1, ID2);
+            return null;
+        }
+
+        // if a connection is found, reconstruct the path from ID1 to ID2 and display it
+        List<Integer> connection = new ArrayList<Integer>();
+        for (i = ID2; i != -1; i = parent[i]) {
+            connection.add(i);
+        }
+        Collections.reverse(connection); //reverse the connection list to make it from ID1 to ID2 instead of ID2 to ID1
+        return connection;
+    }
+
+    public void printConnections_DFS(int ID1, int ID2) { //will use a stack
+        System.out.println("Work In Progress.");
+    }
+
+
 }
+

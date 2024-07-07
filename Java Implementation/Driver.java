@@ -89,8 +89,12 @@ public class Driver {
                     */  
                     System.out.print("Enter ID number: ");
                     ID1 = Integer.parseInt(System.console().readLine());
+                    if (ID1 < 0 || (graphChoice == 1 && ID1 >= adjacencyList.getNumVertices()) || (graphChoice == 2 && ID1 >= adjacencyMatrix.getNumVertices())) {
+                        System.out.println("Invalid ID. Please enter a valid ID within the range.");
+                        break;
+                    }
                     if (graphChoice == 1) {
-                        
+                        //adjacencyList.printFriendList(ID1);
                     } else if (graphChoice == 2) {
                         adjacencyMatrix.printFriendList(ID1);
                     }
