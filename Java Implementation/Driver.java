@@ -52,8 +52,9 @@ public class Driver {
 
             switch(graphChoice) {
                 case 1:
-                    System.out.println("WIP.");
                     adjacencyList = new AdjacencyList();
+                    adjacencyList.loadFromFile(fileString);
+                    // adjacencyList.printAdjacencyList();
                     break;
                 case 2:
                     adjacencyMatrix = new AdjacencyMatrix();
@@ -94,7 +95,7 @@ public class Driver {
                         break;
                     }
                     if (graphChoice == 1) {
-                        //adjacencyList.printFriendList(ID1);
+                        adjacencyList.printFriendList(ID1);
                     } else if (graphChoice == 2) {
                         adjacencyMatrix.printFriendList(ID1);
                     }
@@ -121,21 +122,38 @@ public class Driver {
                     System.out.print("\nEnter choice: ");
                     searchChoice = Integer.parseInt(System.console().readLine());
                     if (graphChoice == 1) {
-                        
-                    } else if (graphChoice == 2) {
                         if (searchChoice == 1) {
                             System.out.printf("\nPerforming BFS on the graph from %d to %d...\n", ID1, ID2);
-                            connection = adjacencyMatrix.printConnections_BFS(ID1, ID2);
-                            if (connection != null) {
+                            connection = adjacencyList.findConnections_BFS(ID1, ID2);
+                            if (connection != null && !connection.isEmpty()) {
                                 System.out.printf("A connection from IDs %d to %d EXISTS!\n", ID1, ID2);
                                 for (i = 0; i < connection.size() - 1; i++) {
                                     System.out.printf("%d is friends with %d.\n", connection.get(i), connection.get(i + 1));
                                 }
                                 System.out.println();
+                            } else {
+                                System.out.printf("No connection from IDs %d to %d.\n", ID1, ID2);
                             }
                         } else if (searchChoice == 2) {
                             System.out.printf("\nPerforming DFS on the graph from %d to %d...\n", ID1, ID2);
-                            adjacencyMatrix.printConnections_DFS(ID1, ID2);;
+                            
+                        }
+                    } else if (graphChoice == 2) {
+                        if (searchChoice == 1) {
+                            System.out.printf("\nPerforming BFS on the graph from %d to %d...\n", ID1, ID2);
+                            connection = adjacencyMatrix.findConnections_BFS(ID1, ID2);
+                            if (connection != null && !connection.isEmpty()) {
+                                System.out.printf("A connection from IDs %d to %d EXISTS!\n", ID1, ID2);
+                                for (i = 0; i < connection.size() - 1; i++) {
+                                    System.out.printf("%d is friends with %d.\n", connection.get(i), connection.get(i + 1));
+                                }
+                                System.out.println();
+                            } else {
+                                System.out.printf("No connection from IDs %d to %d.\n", ID1, ID2);
+                            }
+                        } else if (searchChoice == 2) {
+                            System.out.printf("\nPerforming DFS on the graph from %d to %d...\n", ID1, ID2);
+                           
                         }
                     }
                     break;

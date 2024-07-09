@@ -17,24 +17,34 @@ public class AdjacencyMatrix {
     } 
 
     public boolean hasEdge(int i, int j) {
-        return adjacencyMatrix[i][j] && adjacencyMatrix[j][i];
+        // Check if i and j are within the bounds of the matrix
+        if (i >= 0 && i < adjacencyMatrix.length && j >= 0 && j < adjacencyMatrix[i].length) {
+            return adjacencyMatrix[i][j] && adjacencyMatrix[j][i];
+        } else {
+            // Return false or handle the error appropriately if i or j are out of bounds
+            return false;
+        }
     }
 
     public void loadFromFile(String fileString) { //fileString is either file connection or file name
+        int i, j;
+        Scanner sc;
+        String[] parts, edge;
+        
         try {
-            Scanner sc = new Scanner(new File(fileString));
+            sc = new Scanner(new File(fileString));
             
             if (sc.hasNextLine()) {
-                String[] parts = sc.nextLine().split(" ");
+                parts = sc.nextLine().split(" ");
                 this.numVertices = Integer.parseInt(parts[0]);
                 this.numEdges = Integer.parseInt(parts[1]);
                 this.adjacencyMatrix = new boolean[numVertices][numVertices];
             }
 
             while (sc.hasNextLine() == true) {
-                String[] edge = sc.nextLine().split(" ");
-                int i = Integer.parseInt(edge[0]);
-                int j = Integer.parseInt(edge[1]);
+                edge = sc.nextLine().split(" ");
+                i = Integer.parseInt(edge[0]);
+                j = Integer.parseInt(edge[1]);
                 adjacencyMatrix[i][j] = true;
                 adjacencyMatrix[j][i] = true;
             }
@@ -75,8 +85,8 @@ public class AdjacencyMatrix {
         System.out.printf("\n\n%d's Friend Count: %d\n", ID1, friendCount);
     }
 
-    //this method uses a priority queue to implement BFS, as it is a min heap and will always dequeue the vertex with the smallest ID first
-    public List<Integer> printConnections_BFS(int ID1, int ID2) {
+    //queue is implemented using LinkedList
+    public List<Integer> findConnections_BFS(int ID1, int ID2) {
         // first, validate ID inputs
         if (ID1 < 0 || ID1 >= this.numVertices || ID2 < 0 || ID2 >= this.numVertices || ID1 == ID2) {
             System.out.printf("Invalid ID/s. The range of an ID should be from 0 to " + (this.numVertices - 1) + " inclusive.\nThe two IDs should also not be the same.\n\n");
@@ -85,7 +95,7 @@ public class AdjacencyMatrix {
 
         int i, currentVertex;
         boolean connectionFound = false;
-        PriorityQueue<Integer> queue = new PriorityQueue<>(); 
+        Queue<Integer> queue = new LinkedList<>(); 
         boolean visitedVertices[] = new boolean[this.numVertices]; // keeps track of visited vertices
         int[] parent = new int[this.numVertices]; // keeps track of the parent of each vertex
         Arrays.fill(parent, -1); // initialize all elements of parent to -1 since at the start, we do not know yet the parent of each vertex
@@ -115,7 +125,7 @@ public class AdjacencyMatrix {
         // if no connection is found between ID1 and ID2, display an error message
         if (!connectionFound) {
             System.out.printf("No connection found between IDs %d and %d.\n", ID1, ID2);
-            return null;
+            return Collections.emptyList();
         }
 
         // if a connection is found, reconstruct the path from ID1 to ID2 and display it
@@ -125,9 +135,5 @@ public class AdjacencyMatrix {
         }
         Collections.reverse(connection); //reverse the connection list to make it from ID1 to ID2 instead of ID2 to ID1
         return connection;
-    }
-
-    public void printConnections_DFS(int ID1, int ID2) { //will use a stack
-        System.out.println("Work In Progress.");
     }
 }

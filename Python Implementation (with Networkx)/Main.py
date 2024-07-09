@@ -1,6 +1,7 @@
-def main():
-    choice = 0
+import networkx as nx
 
+def main():
+    
     # This is the main menu of the program.
     # Add a part here that allows the user to import a .txt file containing data for a social graph.
     # If the .txt file is not found, display an error message, BUT not exit the program.
