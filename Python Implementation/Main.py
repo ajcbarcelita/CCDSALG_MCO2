@@ -1,5 +1,6 @@
 import networkx as nx
 import AdjacencyList, AdjacencyMatrix
+import matplotlib.pyplot as plt
 
 def main():
     file_found = False

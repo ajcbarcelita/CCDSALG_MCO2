@@ -96,7 +96,7 @@ public class AdjacencyList {
 
         int i, currentVertex;
         boolean connectionFound = false;
-        Queue<Integer> queue = new LinkedList<>(); // stores the vertices to be visited next
+        PriorityQueue<Integer> queue = new PriorityQueue<>(); // stores the vertices to be visited next
         boolean visitedVertices[] = new boolean[this.numVertices]; // keeps track of visited vertices
         int[] parent = new int[this.numVertices]; // keeps track of the parent of each vertex
         Arrays.fill(parent, -1); // initialize all elements of parent to -1 since at the start, we do not know yet the parent of each vertex

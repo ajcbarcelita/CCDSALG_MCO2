@@ -46,7 +46,7 @@ public class AdjacencyMatrix {
                 i = Integer.parseInt(edge[0]);
                 j = Integer.parseInt(edge[1]);
                 adjacencyMatrix[i][j] = true;
-                adjacencyMatrix[j][i] = true;
+                // adjacencyMatrix[j][i] = true;
             }
             System.out.printf("File loaded successfully. Matrix Graph has %d vertices and %d edges.\n\n", this.numVertices, this.numEdges);
             sc.close();
@@ -85,7 +85,7 @@ public class AdjacencyMatrix {
         System.out.printf("\n\n%d's Friend Count: %d\n", ID1, friendCount);
     }
 
-    //queue is implemented using LinkedList
+    //queue is implemented using a priority queue
     public List<Integer> findConnections_BFS(int ID1, int ID2) {
         // first, validate ID inputs
         if (ID1 < 0 || ID1 >= this.numVertices || ID2 < 0 || ID2 >= this.numVertices || ID1 == ID2) {
@@ -95,7 +95,7 @@ public class AdjacencyMatrix {
 
         int i, currentVertex;
         boolean connectionFound = false;
-        Queue<Integer> queue = new LinkedList<>(); 
+        PriorityQueue<Integer> queue = new PriorityQueue<>(); //this declaration w/o defining a custom comparator ensures NATURAL ORDERING (lower value node has higher priority)
         boolean visitedVertices[] = new boolean[this.numVertices]; // keeps track of visited vertices
         int[] parent = new int[this.numVertices]; // keeps track of the parent of each vertex
         Arrays.fill(parent, -1); // initialize all elements of parent to -1 since at the start, we do not know yet the parent of each vertex
