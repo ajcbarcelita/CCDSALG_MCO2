@@ -21,7 +21,7 @@ public class Driver {
 
         while (fileFound == false) {
             System.out.println("\n\t==== LOAD GRAPH DATA ====\n");
-            System.out.println("Please indicate the ABSOLUTE file connection or file name of the .txt file containing the social graph data.");
+            System.out.println("Please indicate the ABSOLUTE file path or file name of the .txt file containing the social graph data.");
             System.out.print("If entering file name, ensure that the file is in the same directory as this program.\n");
             System.out.print("Enter file connection or file name: ");
             fileString = sc.nextLine();
@@ -123,7 +123,7 @@ public class Driver {
                     searchChoice = Integer.parseInt(System.console().readLine());
                     if (graphChoice == 1) {
                         if (searchChoice == 1) {
-                            System.out.printf("\nPerforming BFS on the graph from %d to %d...\n", ID1, ID2);
+                            System.out.printf("\nPerforming BFS on the graph from %d to %d...\n", ID1, ID2); //change
                             connection = adjacencyList.findConnections_BFS(ID1, ID2);
                             if (connection != null && !connection.isEmpty()) {
                                 System.out.printf("A connection from IDs %d to %d EXISTS!\n", ID1, ID2);
