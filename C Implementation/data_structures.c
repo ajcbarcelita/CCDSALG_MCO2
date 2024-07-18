@@ -1,13 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-// #include "data_structures.h"
+#include "data_structures.h"
 
 //implement a linked list
-typedef struct singlyNodeTag {
-    int data;
-    struct singlyNodeTag *nextNode;
-} singlyNode;
+
 
 singlyNode* createNode(int data)
 {
@@ -184,10 +181,6 @@ void freeLinkedList(singlyNode **head)
     we will not use an a priority value of int type for simplicity, since the data can serve as an implicit priority value  
     take note, lower value -> higher priority
 */
-typedef struct PriorityQueueTag {
-    singlyNode *front;
-    singlyNode *rear;
-} PriorityQueue;
 
 PriorityQueue* createPriorityQueue()
 {
@@ -274,9 +267,6 @@ void freePriorityQueue(PriorityQueue *priorityQueue)
     - peek (get top element)
     - isEmpty
 */
-typedef struct StackTag {
-    singlyNode *top;
-} Stack;
 
 void pushStack();
 int pop();

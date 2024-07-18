@@ -136,7 +136,16 @@ public class Driver {
                             }
                         } else if (searchChoice == 2) {
                             System.out.printf("\nPerforming DFS on the graph from %d to %d...\n", ID1, ID2);
-                            
+                            connection = adjacencyList.findConnections_DFS(ID1, ID2);
+                            if (connection != null && !connection.isEmpty()) {
+                                System.out.printf("A connection from IDs %d to %d EXISTS!\n", ID1, ID2);
+                                for (i = 0; i < connection.size() - 1; i++) {
+                                    System.out.printf("%d is friends with %d.\n", connection.get(i), connection.get(i + 1));
+                                }
+                                System.out.println();
+                            } else {
+                                System.out.printf("No connection from IDs %d to %d.\n", ID1, ID2);
+                            }
                         }
                     } else if (graphChoice == 2) {
                         if (searchChoice == 1) {
@@ -153,7 +162,16 @@ public class Driver {
                             }
                         } else if (searchChoice == 2) {
                             System.out.printf("\nPerforming DFS on the graph from %d to %d...\n", ID1, ID2);
-                           
+                            connection = adjacencyMatrix.findConnections_DFS(ID1, ID2);
+                            if (connection != null && !connection.isEmpty()) {
+                                System.out.printf("A connection from IDs %d to %d EXISTS!\n", ID1, ID2);
+                                for (i = 0; i < connection.size() - 1; i++) {
+                                    System.out.printf("%d is friends with %d.\n", connection.get(i), connection.get(i + 1));
+                                }
+                                System.out.println();
+                            } else {
+                                System.out.printf("No connection from IDs %d to %d.\n", ID1, ID2);
+                            }
                         }
                     }
                     break;
