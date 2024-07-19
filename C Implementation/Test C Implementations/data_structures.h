@@ -1,6 +1,7 @@
 #ifndef DATA_STRUCTURES_H
 #define DATA_STRUCTURES_H
 
+#include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
@@ -44,6 +45,5 @@ void push(Stack *stack, int data);
 int pop(Stack *stack);
 int peekStack(Stack *stack);
 bool isEmptyStack(Stack *stack);
-void freeStack(Stack *stack);
 
 #endif

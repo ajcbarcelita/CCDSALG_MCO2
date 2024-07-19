@@ -47,7 +47,7 @@ public class AdjacencyList {
                 i = Integer.parseInt(edge[0]);
                 j = Integer.parseInt(edge[1]);
                 adjacencyList.get(i).add(j);
-                adjacencyList.get(j).add(i);
+                // adjacencyList.get(j).add(i);
             }
             System.out.printf("File loaded successfully. List Graph has %d vertices and %d edges.\n\n", this.numVertices, this.numEdges);
             sc.close();
@@ -71,6 +71,8 @@ public class AdjacencyList {
         }
     }
 
+    //will probably change this back so that it will ont use a hashset
+    
     //using a hashset is more efficient vs arraylist since it has O(1) time complexity for contains() method, a result of the hash function
     public void printFriendList(int ID1) { //ID1's friends are the nodes adjacent to it
         ArrayList<Integer> friendList = adjacencyList.get(ID1);

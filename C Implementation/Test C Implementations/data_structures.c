@@ -15,7 +15,6 @@ singlyNode* createNode (int data) {
     return newNode;
 }
 
-//these might even be unnecessary tbh but lets see
 void insertAtBeginning(singlyNode **head, int data) {
     singlyNode *newNode = createNode(data);
     newNode->nextNode = *head;
@@ -220,7 +219,7 @@ void freePriorityQueue(PriorityQueue *priorityQueue) {
             current = nextNode;
         }
         priorityQueue->front = priorityQueue->rear = NULL;
-        free(priorityQueue);
+    
     }
 }
 
@@ -228,71 +227,5 @@ void freePriorityQueue(PriorityQueue *priorityQueue) {
     Stack Implementation
 */
 Stack* createStack() {
-    Stack *stack = (Stack*)malloc(sizeof(Stack));
-    if (stack == NULL) {
-        printf("Memory allocation for stack has failed. Terminating program...\n");
-        exit(-1);
-    }
-    stack->top = NULL;
-    return stack;
-}
 
-void push(Stack *stack, int data) {
-    singlyNode* newNode = createNode(data);
-    if (newNode == NULL) {
-        printf("Memory allocation for new node has failed. Terminating program...\n");
-        exit(-1);
-    }
-    newNode->data = data;
-    newNode->nextNode = stack->top;
-    stack->top = newNode;
-}
-
-bool isEmptyStack(Stack *stack) {
-    return stack->top == NULL;
-}
-
-int pop(Stack *stack) {
-    if(isEmptyStack(stack)) {
-        printf("Stack is empty. Nothing to pop.\n");
-        return -1;
-    } else {
-        singlyNode *temp = stack->top;
-        int data = temp->data;
-        stack->top = stack->top->nextNode;
-        free(temp);
-        return data;
-    }
-}
-
-int peekStack(Stack *stack) {
-    if (isEmptyStack(stack)) {
-        printf("Stack is empty. Nothing to peek.\n");
-        return -1;
-    }
-    return stack->top->data;
-}
-
-
-void freeStack(Stack *stack) {
-    while(!isEmptyStack(stack)) {
-        pop(stack);
-    }
-    free(stack);
-}
-
-/*
-    Other functions
-*/
-void swap (int *a, int *b) {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-void reverseArray (int *arr, int size) {
-    int i;
-    for (i = 0; i < size / 2; i++) {
-        swap(&arr[i], &arr[size - i - 1]);
-    }
 }

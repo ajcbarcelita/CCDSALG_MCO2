@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include "data_structures.c"
 
-bool** loadAdjMatrix(char *fileString, int* numVertices, int* numEdges)
+bool** loadAdjMatrix(char *fileString, int *numVertices, int *numEdges)
 {
     FILE *fp;
     int i, j, ID1, ID2, status;
@@ -47,8 +47,11 @@ bool** loadAdjMatrix(char *fileString, int* numVertices, int* numEdges)
     return adjMatrix;
 }
 
-bool hasEdge(bool** adjMatrix, int ID1, int ID2)
+bool hasEdge_AdjMatrix(bool** adjMatrix, int numVertices, int ID1, int ID2)
 {
+    if ((ID1 < 0 || ID1 >= numVertices) || (ID2 < 0 || ID2 >= numVertices)) {
+        return false;
+    }
     return adjMatrix[ID1][ID2] && adjMatrix[ID2][ID1];
 }
 
@@ -73,28 +76,146 @@ void printFriendList(bool **adjMatrix, int numVertices, int ID1)
     }
     printf("\n\t=== %d's FRIEND LIST ===\n", ID1);
     for (i = 0; i < numVertices; i++) {
-        if(hasEdge(adjMatrix, ID1, i)) {
+        if(hasEdge(adjMatrix, numVertices, ID1, i)) {
             printf("%d\n", i);
             friendCount++;
         }
     }
 }
 
-int* findConnections_BFS(bool** adjMatrix, int numVertices, int ID1, int ID2)
+
+/*
+    This function aims to determine whether if a connection exists between two IDs in the social graph that is implemented
+    using an adjacency matrix.
+    If no connection is found OR if , returns NULL
+*/
+int* findConnections_BFS_AdjMatrix(bool** adjMatrix, int numVertices, int ID1, int ID2, int* pathLength)
 {
-    int i, currentIndex;
-    bool* visitedVertices = calloc(numVertices, sizeof(bool));
-    
     if (ID1 < 0 || ID1 >= numVertices || ID2 < 0 || ID2 >= numVertices || ID1 == ID2) {
         return NULL;
     }
+
+    int i, j, currentIndex;
+    bool connectionFound = false;
+    int* parentVertices =  malloc(numVertices * sizeof(int));
+    //include check
+    bool* visitedVertices = calloc(numVertices, sizeof(bool));
+    //include check
+    PriorityQueue *priorityQueue = createPriorityQueue();
+
+    //include a check here for when manual alloc for these arrays results in NULL and will return early
+
+    memset(parentVertices, -1, numVertices * sizeof(int));
+    visitedVertices[ID1] = true;
+    enqueue(priorityQueue, ID1);
+
+    while (!isEmptyQueue(priorityQueue)) {
+        currentIndex = dequeue(priorityQueue);
+        if (currentIndex == ID2) {
+            connectionFound = true;
+            break;
+        }
+        for (i = 0; i < numVertices; i++) {
+            if (hasEdge_AdjMatrix(adjMatrix, numVertices, i, currentIndex) && !visitedVertices[i]) {
+                visitedVertices[i] = true;
+                parentVertices[i] = currentIndex;
+                enqueue(priorityQueue, i);
+            }
+        }
+    }
     
+    if (!connectionFound) {
+        free(parentVertices);
+        free(visitedVertices);
+        free(priorityQueue);
+        return NULL;
+    }
+
+    //reconstruction logic
+    *pathLength = 0;
+    for (i = ID2; i != -1; i = parentVertices[i]) {
+        (*pathLength)++;
+    }
+
+    int* path = malloc(*pathLength * sizeof(int));
+    if (path == NULL) {
+        printf("Memory allocation for path has failed. Terminating program...\n");
+        free(parentVertices);
+        free(visitedVertices);
+        freePriorityQueue(priorityQueue);
+        exit(-1);
+    }
+
+    i = ID2;
+    for (j = *pathLength - 1; j >= 0; j--) {
+        path[j] = i;
+        i = parentVertices[i];
+    }
+
+    free(parentVertices);
+    free(visitedVertices);
+    freePriorityQueue(priorityQueue);
+    return path;
 }
 
-// int* findConnections_DFS(bool** adjMatrix, int numVertices, int ID1, int ID2)
-// {
-//     if (ID1 < 0 || ID1 >= numVertices || ID2 < 0 || ID2 >= numVertices || ID1 == ID2) {
-//         return NULL;
-//     }
-// }
+int* findConnections_DFS_AdjMatrix(bool** adjMatrix, int numVertices, int ID1, int ID2, int* pathLength)
+{
+    if (ID1 < 0 || ID1 >= numVertices || ID2 < 0 || ID2 >= numVertices || ID1 == ID2) {
+        return NULL;
+    }
+    int i, j, currentVertex;
+    bool connectionFound = false;
+    int* parentVertices = malloc(numVertices * sizeof(int));
+    //include check for null
+    memset(parentVertices, -1, numVertices * sizeof(int));
+    bool* visitedVertices = calloc(numVertices, sizeof(bool));
+    //include check for if null
+
+    Stack *stack = createStack();
+    //include check for if null
+
+    push(stack, ID1);
+    visitedVertices[ID1] = true;
+
+    while(!isEmptyStack(stack)) {
+        currentVertex = pop(stack);
+        if (currentVertex == ID2) {
+            connectionFound = true;
+            break;
+        }
+        for(i = 0; i < numVertices; i++) {
+            if (hasEdge(adjMatrix, numVertices, i, currentVertex) && !visitedVertices[i]) {
+                visitedVertices[i] = true;
+                parentVertices[i] = currentVertex;
+                push(stack, i);
+            }
+        }
+    }
+
+    if (!connectionFound) {
+        free(parentVertices);
+        free(visitedVertices);
+        freeStack(stack);
+        return NULL;
+    }
+
+    //reconstruction logic
+    *pathLength = 0;
+    for (i = ID2; i != -1; i = parentVertices[i]) {
+        (*pathLength)++;
+    }
+
+    int* path = malloc(*pathLength * sizeof(int));
+    //include check for if null
+    i = ID2;
+    for(j = *pathLength - 1; j >= 0; j--) {
+        path[j] = i;
+        i = parentVertices[i];
+    }
+
+    free(parentVertices);
+    free(visitedVertices);
+    freeStack(stack);
+    return path;
+}
     

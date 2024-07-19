@@ -1,5 +1,5 @@
-import java.util.*; //Scanner, Queue and List Interfaces, LinkedList, and Stack Class
-import java.io.*; //File Class
+import java.util.*;
+import java.io.*;
 
 public class AdjacencyMatrix {
     private boolean adjacencyMatrix[][];

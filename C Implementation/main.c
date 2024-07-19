@@ -1,12 +1,12 @@
 #include <string.h>
 #include "adjacencyList.c"
 #include "adjacencyMatrix.c"
-#include "data_structures.c"
+#include "data_structures.h"
 
 int main()
 {
-    int i, ID1, ID2, status; 
-    int *numVertices = 0, *numEdges = 0;
+    int i, ID1, ID2, status = 0, pathLength = 0; 
+    int numVertices = 0, numEdges = 0;
     int menuChoice = 0, graphChoice = 0, searchChoice = 0;
     char fileString[500];
     bool fileFound = false;
@@ -54,7 +54,7 @@ int main()
             case 2:
                 printf("Adjacency Matrix selected.\n");
                 //create the adj matrix
-                adjMatrix = loadAdjMatrix(fileString, numVertices, numEdges);
+                adjMatrix = loadAdjMatrix(fileString, &numVertices, &numEdges);
                 break;
             default:
                 printf("Invalid choice. Please try again.\n");
@@ -81,7 +81,7 @@ int main()
                 if (graphChoice == 1) {
                     printf("WIP"); //printFriendList(adjList, numVertices, ID1);
                 } else if (graphChoice == 2) {
-                    printFriendList(adjMatrix, &numVertices, ID1);
+                    printFriendList(adjMatrix, numVertices, ID1);
                 }
                 break;
 
@@ -100,7 +100,16 @@ int main()
                 } else if (graphChoice == 2) {
                     if (searchChoice == 1) {
                         printf("Performing Breadth First Search on the graph (adjacency matrix)...\n");
-                        int* path = findConnections_BFS(adjMatrix, &numVertices, ID1, ID2);
+                        int* path = findConnections_BFS(adjMatrix, numVertices, ID1, ID2, &pathLength);
+                        if (path == NULL) {
+                            printf("No connection found between ID %d and ID %d.\n", ID1, ID2);
+                        } else {
+                            printf("Connection found between ID %d and ID %d.\n", ID1, ID2);
+                            for (i = 0; i < pathLength - 1; i++) {
+                                printf("%d is friends with %d\n", path[i], path[i + 1]);
+                            }
+                            printf("\n");
+                        } 
                     } else if (searchChoice == 2) {
 
                     }
