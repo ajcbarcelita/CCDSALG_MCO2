@@ -140,5 +140,56 @@ public class AdjacencyList {
         return connection;
     }
 
+    public List<Integer> findConnections_DFS(int ID1, int ID2) {
+        // first, validate ID inputs
+        if (ID1 < 0 || ID1 >= this.numVertices || ID2 < 0 || ID2 >= this.numVertices || ID1 == ID2) {
+            System.out.printf("Invalid ID/s. The range of an ID should be from 0 to " + (this.numVertices - 1) + " inclusive.\nThe two IDs should also not be the same.\n\n");
+            return null;
+        }
+
+        int i, currentVertex;
+        boolean connectionFound = false;
+        Stack<Integer> stack = new Stack<>(); // stores the vertices to be visited next
+        boolean visitedVertices[] = new boolean[this.numVertices]; // keeps track of visited vertices
+        int[] parent = new int[this.numVertices]; // keeps track of the parent of each vertex
+        Arrays.fill(parent, -1); // initialize all elements of parent to -1 since at the start, we do not know yet the parent of each vertex
+
+        //mark the first vertex as visited and push it into the stack
+        visitedVertices[ID1] = true;
+        stack.push(ID1);
+
+        // process the vertices in the stack until stack is empty or connection is found
+        while (!stack.isEmpty()) {
+            currentVertex = stack.pop(); // pop the vertex at the top of the stack
+            if (currentVertex == ID2) {
+                connectionFound = true;
+                break; // exit the loop if the currentVertex is equal to ID2
+            }
+
+            // Explore unvisited neighboring vertices of the current vertex
+            for (int neighbor : adjacencyList.get(currentVertex)) {
+                if (!visitedVertices[neighbor]) {
+                    visitedVertices[neighbor] = true;
+                    parent[neighbor] = currentVertex;
+                    stack.push(neighbor);
+                }
+            }
+        }
+
+        // if no connection is found between ID1 and ID2, display an error message
+        if (!connectionFound) {
+            System.out.printf("No connection found between IDs %d and %d.\n", ID1, ID2);
+            return Collections.emptyList();
+        }
+
+        // if a connection is found, reconstruct the path from ID1 to ID2 and display it
+        List<Integer> connection = new ArrayList<Integer>();
+        for (i = ID2; i != -1; i = parent[i]) {
+            connection.add(i);
+        }
+        Collections.reverse(connection); //reverse the connection list to make it from ID1 to ID2 instead of ID2 to ID1
+        return connection;
+    }
+
 }
 

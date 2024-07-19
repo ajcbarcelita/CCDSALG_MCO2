@@ -1,7 +1,10 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
 #include "data_structures.h"
-/*
-    Functions relating to linked lists and its operations
-*/
+
+//implement a linked list
+
 
 singlyNode* createNode (int data) {
     singlyNode *newNode = (singlyNode*)malloc(sizeof(singlyNode));
@@ -148,11 +151,20 @@ void freeLinkedList(singlyNode **head) {
     }
     *head = NULL;
 }
-
+ 
+//implement an ASCENDING ORDER PRIORITY queue (FIFO) using a SINGLY linked list
 /*
-    Priority Queue functions
+    - enqueue (inset at end)
+    - dequeue (delete from front)
+    - peek (get front element)
+    - isEmpty
+
+    we will not use an a priority value of int type for simplicity, since the data can serve as an implicit priority value  
+    take note, lower value -> higher priority
 */
-PriorityQueue* createPriorityQueue() {
+
+PriorityQueue* createPriorityQueue()
+{
     PriorityQueue *priorityQueue = (PriorityQueue*)malloc(sizeof(PriorityQueue));
     if (priorityQueue == NULL) {
         printf("Memory allocation for priority queue has failed. Terminating program...\n");

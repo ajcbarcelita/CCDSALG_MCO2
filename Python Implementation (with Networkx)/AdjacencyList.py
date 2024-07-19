@@ -1,13 +1,16 @@
 import networkx as nx
 
-class AdjacencyMatrix:
+class AdjacencyList:
+    #constructor
     def __init__(self):
         self.graph = nx.Graph()
     
     def get_num_vertices(self):
+        #already a function in networkx
         return self.graph.number_of_nodes()
 
     def has_edge(self, i, j):
+        #has edge is already a function in networkx
         return self.graph.has_edge(i, j)
 
     def load_from_file(self, file_string):
@@ -31,14 +34,13 @@ class AdjacencyMatrix:
         finally:
             file.close()
             
-    def print_adjacency_matrix(self):
-        print("\n\t==== ADJACENCY MATRIX ====\n")
-        for i in range(self.get_num_vertices()):
-            for j in range(self.get_num_vertices()):
-                if self.graph.has_edge(i, j):
-                    print("1 ", end="")# to make it so that it ends with a space rather than a new line
-                else:
-                    print("0 ", end="")
+    
+    def print_adjacency_list(self):
+        print("\n\t==== ADJACENCY LIST ====\n")
+        for node in self.graph.nodes:
+            print(f"{node}: ", end="")
+            for neighbor in self.graph.neighbors(node):
+                print(f"{neighbor} ", end="")
             print()
 
     def print_friend_list(self, ID1):
