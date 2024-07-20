@@ -90,4 +90,42 @@ class AdjacencyMatrix:
             i = parent[i]
         connection.reverse()  # Reverse the connection list to make it from ID1 to ID2 instead of ID2 to ID1
         return connection
+        
+    def find_connections_dfs(self, ID1, ID2):
+        if ID1 < 0 or ID1 >= self.get_num_vertices() or ID2 < 0 or ID2 >= self.get_num_vertices() or ID1 == ID2:
+            print(f"Invalid ID/s. The range of an ID should be from 0 to {self.get_num_vertices() - 1} inclusive.\nThe two IDs should also not be the same.\n\n")
+            return None
+
+        stack = [ID1]
+        visited_vertices = [False] * self.get_num_vertices()
+        parent = [-1] * self.get_num_vertices()
+
+        visited_vertices[ID1] = True
+        connection_found = False
+
+        while stack:
+            current_vertex = stack.pop()
+            if current_vertex == ID2:
+                connection_found = True
+                break
+
+            for neighbor in self.graph.neighbors(current_vertex):
+                if not visited_vertices[neighbor]:
+                    visited_vertices[neighbor] = True
+                    parent[neighbor] = current_vertex
+                    stack.append(neighbor)
+
+        if not connection_found:
+            print(f"No connection found between IDs {ID1} and {ID2}.")
+            return []
+
+        connection = []
+        i = ID2
+        while i != -1:
+
+            connection.append(i)
+            i = parent[i]
+            
+        connection.reverse()
+        return connection
 
