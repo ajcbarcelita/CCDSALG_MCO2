@@ -1,19 +1,57 @@
 import networkx as nx
 import heapq #import heapq for priority queue
 class AdjacencyList:
+    """
+    A class to represent a graph using an adjacency list.
+    It uses NetworkX to handle graph operations and provides
+    methods to load the graph from a file, print the adjacency
+    list, display a friend list, and find connections between
+    vertices using BFS or DFS.
+    
+    by Aaron Go
+    """
+    
+    
     #constructor
     def __init__(self):
-        self.graph = nx.Graph()#initialize empty graph
+        """
+        Initializes an empty graph using NetworkX.
+        """
+        self.graph = nx.Graph()
     
     def get_num_vertices(self):
-        #already a function in networkx, returns number of nodes
+        """
+        Returns the number of vertices (nodes) in the graph.
+
+        Returns:
+            int: Number of nodes in the graph.
+        """
         return self.graph.number_of_nodes()
 
     def has_edge(self, i, j):
+        """
+        Checks if there is an edge between vertices i and j.
+
+        Args:
+            i (int): The first vertex.
+            j (int): The second vertex.
+
+        Returns:
+            bool: True if there is an edge between i and j, False otherwise.
+        """
         #has edge is already a function in networkx
         return self.graph.has_edge(i, j)
-
+    
     def load_from_file(self, file_string):
+        """
+        Loads the graph from a file. The file should contain
+        the number of vertices and edges on the first line, followed
+        by the edges in subsequent lines.
+
+        Args:
+            file_string (str): The path to the file containing graph data.
+        """
+        
         #open file in read mode
         file = open(file_string, 'r')
         try:
@@ -36,6 +74,10 @@ class AdjacencyList:
             
     
     def print_adjacency_list(self):#print the whole list using for loops
+        """
+        Prints the adjacency list of the graph. Each line contains
+        a vertex followed by its adjacent vertices.
+        """
         print("\n\t==== ADJACENCY LIST ====\n")
         for node in self.graph.nodes:
             print(f"{node}: ", end="")
@@ -44,6 +86,12 @@ class AdjacencyList:
             print()
 
     def print_friend_list(self, ID1):
+        """
+        Prints the list of friends (neighbors) for a given vertex ID.
+
+        Args:
+            ID1 (int): The ID of the vertex for which to print the friend list.
+        """
         friends = list(self.graph.neighbors(ID1))
         print(f"\n\t==== {ID1}'s FRIEND LIST ====\n")
         for friend in friends:
@@ -51,6 +99,19 @@ class AdjacencyList:
         print(f"\n\n{ID1}'s Friend Count: {len(friends)}")
 
     def find_connections_bfs(self, ID1, ID2):
+        """
+        Finds a path between two vertices using Breadth-First Search (BFS). 
+        This BFS implementation utilizes a priority queue to keep track of 
+        the vertices to be explored and ensures that each vertex is visited only once. 
+
+        Args:
+            ID1 (int): The starting vertex ID.
+            ID2 (int): The ending vertex ID.
+
+        Returns:
+            list: A list of vertex IDs representing the path from ID1 to ID2.
+            If no path is found, returns an empty list.
+        """
          # Validate ID inputs
         if ID1 < 0 or ID1 >= self.get_num_vertices or ID2 < 0 or ID2 >= self.get_num_vertices or ID1 == ID2:
             print(f"Invalid ID/s. The range of an ID should be from 0 to {self.get_num_vertices - 1} inclusive.\nThe two IDs should also not be the same.\n\n")
@@ -94,6 +155,19 @@ class AdjacencyList:
         return connection
 
     def find_connections_dfs(self, ID1, ID2):
+        """
+        Finds a path between two vertices using Depth-First Search (DFS). 
+        This implementation uses a stack to keep track of the vertices to be explored 
+        and ensures that each vertex is visited only once. 
+
+        Args:
+            ID1 (int): The starting vertex ID.
+            ID2 (int): The ending vertex ID.
+
+        Returns:
+            list: A list of vertex IDs representing the path from ID1 to ID2.
+            If no path is found, returns an empty list.
+        """
         if ID1 < 0 or ID1 >= self.get_num_vertices() or ID2 < 0 or ID2 >= self.get_num_vertices() or ID1 == ID2:
             print(f"Invalid ID/s. The range of an ID should be from 0 to {self.get_num_vertices() - 1} inclusive.\nThe two IDs should also not be the same.\n\n")
             return None
