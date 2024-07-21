@@ -1,12 +1,12 @@
 import networkx as nx
-
+import heapq #import heapq for priority queue
 class AdjacencyList:
     #constructor
     def __init__(self):
-        self.graph = nx.Graph()
+        self.graph = nx.Graph()#initialize empty graph
     
     def get_num_vertices(self):
-        #already a function in networkx
+        #already a function in networkx, returns number of nodes
         return self.graph.number_of_nodes()
 
     def has_edge(self, i, j):
@@ -35,7 +35,7 @@ class AdjacencyList:
             file.close()
             
     
-    def print_adjacency_list(self):
+    def print_adjacency_list(self):#print the whole list using for loops
         print("\n\t==== ADJACENCY LIST ====\n")
         for node in self.graph.nodes:
             print(f"{node}: ", end="")
@@ -57,27 +57,27 @@ class AdjacencyList:
             return None
 
         connection_found = False
-        queue = []  # List used as a queue
+        priority_queue = []  # List used as a queue
+        
         visited_vertices = [False] * self.get_num_vertices  # Keeps track of visited vertices
         parent = [-1] * self.get_num_vertices  # Keeps track of the parent of each vertex
-
+        heapq.heappush(priority_queue, (0, ID1))  # Use heapq to push the initial node with priority 0
+        
         # Mark the first vertex as visited and enqueue it
         visited_vertices[ID1] = True
-        queue.append(ID1)
 
-        # Process the vertices in the queue until the queue is empty or connection is found
-        while queue:
-            current_vertex = queue.pop(0)  # Dequeue the vertex at the front of the queue
+        # Process the vertices in the priority_queue until the priority_queue is empty or connection is found
+        while priority_queue:
+            _, current_vertex = heapq.heappop(priority_queue)  # Pop the node with the highest priority (lowest value), ignore the first value returned (priority) by assigning it to '_'
             if current_vertex == ID2:
                 connection_found = True
-                break  # Exit the loop if the current_vertex is equal to ID2
-
-            # Explore unvisited neighboring vertices of the current vertex
-            for neighbor in self.graph.neighbors(current_vertex):
-                if not visited_vertices[neighbor]:
+                break
+            #go through all neighboring vertices
+            for neighbor in range(self.get_num_vertices()):
+                if self.graph.has_edge(current_vertex, neighbor) and not visited_vertices[neighbor]:
                     visited_vertices[neighbor] = True
                     parent[neighbor] = current_vertex
-                    queue.append(neighbor)
+                    heapq.heappush(priority_queue, (neighbor, neighbor))  # Push the neighbor with its value as priority
 
         # If no connection is found between ID1 and ID2, display an error message
         if not connection_found:
