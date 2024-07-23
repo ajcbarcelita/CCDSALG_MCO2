@@ -1,16 +1,20 @@
 #include <string.h>
-#include "adjacencyList.c"
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
 #include "adjacencyMatrix.c"
-#include "data_structures.h"
+#include "adjacencyList.c"
+#include "data_structures.c"
 
 int main()
 {
     int i, ID1, ID2, status = 0, pathLength = 0; 
     int numVertices = 0, numEdges = 0;
     int menuChoice = 0, graphChoice = 0, searchChoice = 0;
-    char fileString[500];
-    bool fileFound = false;
-    bool** adjMatrix;
+    char fileString[500]; //the file path or file name of the .txt file containing the social graph data
+    bool fileFound = false; 
+    bool** adjMatrix = NULL;
     FILE *fp;
 
     /*
@@ -31,12 +35,18 @@ int main()
         } else {
             printf("File found. Now loading...\n");
             fileFound = true;
-        }
+        // remove the extra closing brace
     }
 
     /*
-        This part of the code asks for the format of the social graph data.
-        User can choose between Adjacency List and Adjacency Matrix format for the graph.
+        This part of the code asks the user to choose the format of the social graph.
+        The user can choose between an adjacency list or an adjacency matrix.
+        
+        The program will only proceed if the user chooses a valid option, i.e., 1 or 2.
+        If the user chooses an invalid option, the program will prompt the user to choose again.
+        However, if the user inputs an input type that is not a number, the program will terminate.
+        
+        By Aaron Barcelita.
     */
     while (graphChoice != 1 && graphChoice != 2) {
         printf("\n\t=== GRAPH SELECTION ===\n");
@@ -100,7 +110,7 @@ int main()
                 } else if (graphChoice == 2) {
                     if (searchChoice == 1) {
                         printf("Performing Breadth First Search on the graph (adjacency matrix)...\n");
-                        int* path = findConnections_BFS(adjMatrix, numVertices, ID1, ID2, &pathLength);
+                        int* path = findConnections_BFS_AdjMatrix(adjMatrix, numVertices, ID1, ID2, &pathLength);
                         if (path == NULL) {
                             printf("No connection found between ID %d and ID %d.\n", ID1, ID2);
                         } else {
@@ -111,7 +121,17 @@ int main()
                             printf("\n");
                         } 
                     } else if (searchChoice == 2) {
-
+                        printf("Performing Depth First Search on the graph (adjacency matrix)...\n");
+                        int* path = findConnections_DFS_AdjMatrix(adjMatrix, numVertices, ID1, ID2, &pathLength);
+                        if (path == NULL) {
+                            printf("No connection found between ID %d and ID %d.\n", ID1, ID2);
+                        } else {
+                            printf("Connection found between ID %d and ID %d.\n", ID1, ID2);
+                            for (i = 0; i < pathLength - 1; i++) {
+                                printf("%d is friends with %d\n", path[i], path[i + 1]);
+                            }
+                            printf("\n");
+                        }
                     }
                 }
                 break;
@@ -123,8 +143,7 @@ int main()
             default:
                 printf("Invalid choice. Please try again.\n");
                 break;
+            }
         }
-     }
-
-    return 0;
+    }
 }

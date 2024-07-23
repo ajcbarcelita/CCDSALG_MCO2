@@ -1,22 +1,23 @@
-import java.util.*; //Scanner, Queue and List Interfaces, LinkedList, and Stack Class
-import java.io.*; //File Class
+import java.util.*; 
+import java.io.*; 
 
-public class AdjacencyList {
+public class AdjacencyList extends Graph {
     private ArrayList<ArrayList<Integer>> adjacencyList;
-    private int numVertices;
-    private int numEdges;
     
-
+    // Constructor
     public AdjacencyList(){
-        this.numVertices = 0;
-        this.numEdges = 0;
+        super(); //calls the constructor of the parent class
         this.adjacencyList = null;
     }
-    
-    public int getNumVertices(){
-        return this.numVertices;
-    }
 
+    @Override
+    /*
+        Returns true if there is an edge by verifying if the adjacency list of i contains j and the adjacency list of j contains i, 
+        since .txt file contains entries like (0, 1) and (1, 0). This indicates that the graph is undirected.
+        Otherwise, return false.
+        
+        By Aaron Barcelita.
+     */
     public boolean hasEdge(int i, int j) {
         try {
             return adjacencyList.get(i).contains(j) && adjacencyList.get(j).contains(i);
@@ -25,6 +26,14 @@ public class AdjacencyList {
         }
     }
 
+    @Override
+    /*
+        Loads the graph data from a chosen file (that is assumed to exist and is of valid format) and into the adjacency list (using an arraylist of arraylists).
+        The first line of the file ALWAYS contains the number of vertices and edges.
+        The following lines contain the edges of the graph.
+
+        By Aaron Barcelita.
+    */
     public void loadFromFile(String fileString) { //fileString is either file connection or file name
         int i, j;
         Scanner sc;
@@ -32,21 +41,21 @@ public class AdjacencyList {
         
         try {
             sc = new Scanner(new File(fileString));
-            if (sc.hasNextLine()) {
-                parts = sc.nextLine().split(" ");
+            if (sc.hasNextLine()) { //if the file is not empty
+                parts = sc.nextLine().split(" "); //split the first line of the file
                 this.numVertices = Integer.parseInt(parts[0]);
                 this.numEdges = Integer.parseInt(parts[1]);
-                this.adjacencyList = new ArrayList<>();
+                this.adjacencyList = new ArrayList<>(); //initialize the adjacency list
                 for (i = 0; i < this.numVertices; i++) {
-                    this.adjacencyList.add(new ArrayList<Integer>());
+                    this.adjacencyList.add(new ArrayList<Integer>()); //initialize the arraylist for each vertex in the first arraylist
                 }
             }
 
-            while (sc.hasNextLine() == true) {
-                edge = sc.nextLine().split(" ");
+            while (sc.hasNextLine() == true) { //while there are still lines in the file (processing the edges of graph)
+                edge = sc.nextLine().split(" "); 
                 i = Integer.parseInt(edge[0]);
                 j = Integer.parseInt(edge[1]);
-                adjacencyList.get(i).add(j);
+                adjacencyList.get(i).add(j); //add j to the adjacency list of i
                 // adjacencyList.get(j).add(i);
             }
             System.out.printf("File loaded successfully. List Graph has %d vertices and %d edges.\n\n", this.numVertices, this.numEdges);
@@ -56,7 +65,13 @@ public class AdjacencyList {
         }
     }
 
-    public void printAdjacencyList() { 
+    @Override
+    /*
+        Prints the adjacency list of the graph. Used for testing.
+
+        By Aaron Barcelita.
+    */
+    public void printGraph() { 
         int i, j;
         ArrayList<Integer> list;
 
@@ -70,25 +85,32 @@ public class AdjacencyList {
             System.out.println();
         }
     }
-
-    //will probably change this back so that it will ont use a hashset
     
-    //using a hashset is more efficient vs arraylist since it has O(1) time complexity for contains() method, a result of the hash function
+    @Override
+    /*
+        Prints the friend list and count of a given ID1. A node is considered to be ID1's friend if there is an edge between ID1 and that node.
+        In other words, if the node is adjacent to ID1.
+
+        By Aaron Barcelita.
+    */
     public void printFriendList(int ID1) { //ID1's friends are the nodes adjacent to it
         ArrayList<Integer> friendList = adjacencyList.get(ID1);
-        HashSet<Integer> printedFriends = new HashSet<Integer>();
 
         System.out.printf("\n\t==== %d's FRIEND LIST ====\n\n", ID1);
         for (Integer friendID : friendList) {
-            if (!printedFriends.contains(friendID)) {
-                System.out.printf("%d\n", friendID);
-                printedFriends.add(friendID);
-            }
+            System.out.printf("%d\n", friendID);
         }
-        System.out.printf("\n\n%d's Friend Count: %d\n", ID1, printedFriends.size());
+        System.out.printf("\n\n%d's Friend Count: %d\n", ID1, friendList.size());
     }
 
-    //queue is implemented using LinkedList
+    @Override
+    /*
+        This is a modified BFS algorithm that uses a PriorityQueue for finding a connection between two IDs in an undirected and unweighted graph.
+        If path exists, it returns the path from ID1 to ID2.
+        Otherwise, it returns an empty list.
+
+        By Aaron Barcelita.
+    */
     public List<Integer> findConnections_BFS(int ID1, int ID2) {
         // first, validate ID inputs
         if (ID1 < 0 || ID1 >= this.numVertices || ID2 < 0 || ID2 >= this.numVertices || ID1 == ID2) {
@@ -140,6 +162,14 @@ public class AdjacencyList {
         return connection;
     }
 
+    @Override
+    /*
+        This is a non-recursive, modified DFS algorithm that uses a stack for finding a connection between two IDs in an undirected and unweighted graph.
+        If path exists, it returns the path from ID1 to ID2.
+        Otherwise, it returns an empty list.
+
+        By Cody Casem.
+    */
     public List<Integer> findConnections_DFS(int ID1, int ID2) {
         // first, validate ID inputs
         if (ID1 < 0 || ID1 >= this.numVertices || ID2 < 0 || ID2 >= this.numVertices || ID1 == ID2) {
@@ -190,6 +220,5 @@ public class AdjacencyList {
         Collections.reverse(connection); //reverse the connection list to make it from ID1 to ID2 instead of ID2 to ID1
         return connection;
     }
-
 }
 

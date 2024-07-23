@@ -1,6 +1,7 @@
 #ifndef DATA_STRUCTURES_H
 #define DATA_STRUCTURES_H
 
+#include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
@@ -20,12 +21,7 @@ typedef struct StackTag {
 
 //linked list function prototypes
 singlyNode* createNode (int data);
-void insertAtBeginning(singlyNode **head, int data);
-void insertAtEnd(singlyNode **head, int data);
-void insertAtPosition(singlyNode **head, int data, int pos);
-void deleteFirstNode(singlyNode **head);
-void deleteLastNode(singlyNode **head);
-void deleteAtPosition(singlyNode **head, int pos);
+void insertInAscendingOrder(singlyNode **head, int data);
 singlyNode* searchNode(singlyNode *head, int data);
 int countSize(singlyNode *head);
 void freeLinkedList(singlyNode **head);

@@ -1,21 +1,25 @@
 import java.util.*;
 import java.io.*;
 
-public class AdjacencyMatrix {
+public class AdjacencyMatrix extends Graph {
     private boolean adjacencyMatrix[][];
     private int numVertices;
     private int numEdges; //num of edges according to file
-
+    
+    // Constructor
     public AdjacencyMatrix() {
-        this.numVertices = 0;
-        this.numEdges = 0;
+        super();
         this.adjacencyMatrix = null;
     }
-    
-    public int getNumVertices (){
-        return this.numVertices;
-    } 
 
+    /*
+        Returns true if there is an edge between adjMatrix[i][j] and adjMatrix[j][i], since .txt file contains entries like (0, 1) and (1, 0).
+        This indicates that the graph is undirected.
+        Otherwise, return false.
+        
+        By Aaron Barcelita.
+     */
+    @Override
     public boolean hasEdge(int i, int j) {
         // Check if i and j are within the bounds of the matrix
         if (i >= 0 && i < adjacencyMatrix.length && j >= 0 && j < adjacencyMatrix[i].length) {
@@ -26,6 +30,14 @@ public class AdjacencyMatrix {
         }
     }
 
+    @Override
+    /*
+        Loads the graph data from a chosen file (that is assumed to exist and is of valid format) and into the adjacency matrix (using a boolean matrix).
+        The first line of the file ALWAYS contains the number of vertices and edges.
+        The following lines contain the edges of the graph.
+
+        By Aaron Barcelita.
+    */
     public void loadFromFile(String fileString) { //fileString is either file connection or file name
         int i, j;
         Scanner sc;
@@ -55,7 +67,13 @@ public class AdjacencyMatrix {
         }
     }
 
-    public void printAdjacencyMatrix() { //for testing purposes with smaller graphs
+    @Override
+    /*
+        Prints the adjacency matrix of the graph. Used for testing.
+
+        By Aaron Barcelita.
+    */
+    public void printGraph() { //for testing purposes with smaller graphs
         int i, j;
 
         System.out.println("\n\t==== ADJACENCY MATRIX ====\n");
@@ -72,6 +90,13 @@ public class AdjacencyMatrix {
         System.out.println();
     }
 
+    @Override
+    /*
+        Prints the friend list and count of a given ID1. A node is considered to be ID1's friend if that node is in the arraylist of ID1.
+        In other words, if the node is adjacent to ID1.
+
+        By Aaron Barcelita.
+    */
     public void printFriendList(int ID1) { //ID1's friends are the nodes adjacent to it
         int i, friendCount = 0;
 
@@ -85,7 +110,14 @@ public class AdjacencyMatrix {
         System.out.printf("\n\n%d's Friend Count: %d\n", ID1, friendCount);
     }
 
-    //queue is implemented using a priority queue
+    @Override
+    /*
+        This is a modified BFS algorithm that uses a PriorityQueue for finding a connection between two IDs in an undirected and unweighted graph.
+        If path exists, it returns the path from ID1 to ID2.
+        Otherwise, it returns an empty list.
+
+        By Aaron Barcelita.
+    */
     public List<Integer> findConnections_BFS(int ID1, int ID2) {
         // first, validate ID inputs
         if (ID1 < 0 || ID1 >= this.numVertices || ID2 < 0 || ID2 >= this.numVertices || ID1 == ID2) {
@@ -137,7 +169,14 @@ public class AdjacencyMatrix {
         return connection;
     }
 
-    //Stack
+    @Override
+    /*
+        This is a non-recursive, modified DFS algorithm that uses a stack for finding a connection between two IDs in an undirected and unweighted graph.
+        If path exists, it returns the path from ID1 to ID2.
+        Otherwise, it returns an empty list.
+
+        By Cody Casem.
+    */
     public List<Integer> findConnections_DFS(int ID1, int ID2) {
         // first, validate ID inputs
         if (ID1 < 0 || ID1 >= this.numVertices || ID2 < 0 || ID2 >= this.numVertices || ID1 == ID2) {

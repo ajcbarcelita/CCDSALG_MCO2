@@ -1,10 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
 #include "data_structures.h"
 
 //implement a linked list
-
 
 singlyNode* createNode (int data) {
     singlyNode *newNode = (singlyNode*)malloc(sizeof(singlyNode));
@@ -18,105 +14,19 @@ singlyNode* createNode (int data) {
     return newNode;
 }
 
-//these might even be unnecessary tbh but lets see
-void insertAtBeginning(singlyNode **head, int data) {
+void insertInAscendingOrder(singlyNode **head, int data) {
     singlyNode *newNode = createNode(data);
-    newNode->nextNode = *head;
-    *head = newNode;
-}
-
-void insertAtEnd(singlyNode **head, int data) {
-    singlyNode *newNode = createNode(data);
-    if (*head == NULL) {
+    if (*head == NULL || (*head)->data >= data) {  //if linked list is empty or the data is less than the data in the first node
+        newNode->nextNode = *head;
         *head = newNode;
-    } else {
+    } else { //else, find the correct position to insert the new node by traversing the linked list
         singlyNode *temp = *head;
-        while (temp->nextNode != NULL) {
+        while (temp->nextNode != NULL && temp->nextNode->data < data) { //stop traversing when the next node is NULL or the next node's data is greater than the data to be inserted
             temp = temp->nextNode;
         }
+        //insert the new node after 
+        newNode->nextNode = temp->nextNode;
         temp->nextNode = newNode;
-    }
-}
-
-void insertAtPosition(singlyNode **head, int data, int pos) {
-    int i;
-
-    if (pos < 0) {
-        printf("Invalid position. Please try again.\n");
-        return;
-    } else if (pos == 0) {
-        insertAtBeginning(head, data);
-        return; 
-    } else {
-        singlyNode *newNode = createNode(data);
-        singlyNode *temp = *head;
-        for (i = 0; i < pos - 1 && temp != NULL; i++) {
-            temp = temp->nextNode; //traverse to the node before the position
-        }
-        if (temp == NULL) {
-            printf("Position is beyond size of linked list. Try again.\n");
-            return;
-        } else {
-            newNode->nextNode = temp->nextNode; //link new node to the node after the position
-            temp->nextNode = newNode; //link the node before the position to the new node
-        }
-    }
-}
-
-void deleteFirstNode(singlyNode **head) {
-    if (*head == NULL) {
-        printf("Linked list is empty. Nothing to delete.\n");
-        return;
-    }
-    singlyNode *temp = *head;
-    *head = (*head)->nextNode;
-    free(temp);
-}
-
-void deleteLastNode(singlyNode **head) {
-    if (*head == NULL) {
-        printf("Linked list is empty. Nothing to delete.\n");
-        return;
-    }
-    singlyNode *temp = *head;
-    singlyNode *prev = NULL;
-    while (temp->nextNode != NULL) {
-        prev = temp;
-        temp = temp->nextNode;
-    }
-    if (prev == NULL) {
-        *head = NULL;
-    } else {
-        prev->nextNode = NULL;
-    }
-    free(temp);
-}
-
-void deleteNodeAtPosition(singlyNode **head, int pos) {
-    int i;
-    if (*head == NULL) {
-        printf("Linked list is empty. Nothing to delete.\n");
-        return;
-    } else if (pos < 0) {
-        printf("Invalid position. Please try again.\n");
-        return;
-    } else if (pos == 0) {
-        deleteFirstNode(head);
-        return;
-    }
-
-    singlyNode *temp = *head;
-    singlyNode *prev = NULL;
-    for (i = 0; i < pos - 1 && temp != NULL; i++) {
-        prev = temp;
-        temp = temp->nextNode;
-    }
-    if (temp == NULL) {
-        printf("Position is beyond size of linked list. Try again.\n");
-        return;
-    } else {
-        prev->nextNode = temp->nextNode;
-        free(temp);
     }
 }
 
@@ -293,18 +203,3 @@ void freeStack(Stack *stack) {
     free(stack);
 }
 
-/*
-    Other functions
-*/
-void swap (int *a, int *b) {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-void reverseArray (int *arr, int size) {
-    int i;
-    for (i = 0; i < size / 2; i++) {
-        swap(&arr[i], &arr[size - i - 1]);
-    }
-}

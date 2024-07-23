@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "data_structures.c"
+#include "data_structures.h"
 
 bool** loadAdjMatrix(char *fileString, int *numVertices, int *numEdges)
 {
@@ -76,7 +76,7 @@ void printFriendList(bool **adjMatrix, int numVertices, int ID1)
     }
     printf("\n\t=== %d's FRIEND LIST ===\n", ID1);
     for (i = 0; i < numVertices; i++) {
-        if(hasEdge(adjMatrix, numVertices, ID1, i)) {
+        if(hasEdge_AdjMatrix(adjMatrix, numVertices, ID1, i)) {
             printf("%d\n", i);
             friendCount++;
         }
@@ -184,7 +184,7 @@ int* findConnections_DFS_AdjMatrix(bool** adjMatrix, int numVertices, int ID1, i
             break;
         }
         for(i = 0; i < numVertices; i++) {
-            if (hasEdge(adjMatrix, numVertices, i, currentVertex) && !visitedVertices[i]) {
+            if (hasEdge_AdjMatrix(adjMatrix, numVertices, i, currentVertex) && !visitedVertices[i]) {
                 visitedVertices[i] = true;
                 parentVertices[i] = currentVertex;
                 push(stack, i);
