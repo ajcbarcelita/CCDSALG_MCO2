@@ -22,8 +22,6 @@ typedef struct StackTag {
 //linked list function prototypes
 singlyNode* createNode (int data);
 void insertInAscendingOrder(singlyNode **head, int data);
-singlyNode* searchNode(singlyNode *head, int data);
-int countSize(singlyNode *head);
 void freeLinkedList(singlyNode **head);
 
 //priority queue function prototypes

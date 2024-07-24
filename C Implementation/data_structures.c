@@ -1,7 +1,13 @@
 #include "data_structures.h"
 
-//implement a linked list
+//implement a linked list and only the functions I need
 
+/*
+    This function creates a new singly linked list node with the given data. However, this is not inserted into the linked list yet.
+    Returns a pointer to the newly created node.
+
+    By Aaron Barcelita.
+*/
 singlyNode* createNode (int data) {
     singlyNode *newNode = (singlyNode*)malloc(sizeof(singlyNode));
     if (newNode == NULL) {
@@ -14,6 +20,11 @@ singlyNode* createNode (int data) {
     return newNode;
 }
 
+/*
+    This function inserts a new node with the given data into a linked list in ascending order.
+
+    By Aaron Barcelita.
+*/
 void insertInAscendingOrder(singlyNode **head, int data) {
     singlyNode *newNode = createNode(data);
     if (*head == NULL || (*head)->data >= data) {  //if linked list is empty or the data is less than the data in the first node
@@ -30,27 +41,11 @@ void insertInAscendingOrder(singlyNode **head, int data) {
     }
 }
 
-singlyNode* searchNode(singlyNode *head, int key) {
-    singlyNode *current = head;
-    while (current != NULL) {
-        if (current->data == key) {
-            return current;
-        }
-        current = current->nextNode;
-    }
-    return NULL;
-}
+/*
+    This function frees the memory allocated for the linked list. Doing free(LinkedList) is not enough.
 
-int countSize (singlyNode *head) {
-    int count = 0;
-    singlyNode *current = head;
-    while (current != NULL) {
-        count++;
-        current = current->nextNode;
-    }
-    return count;
-}
-
+    By Aaron Barcelita.
+*/
 void freeLinkedList(singlyNode **head) {
     singlyNode *current = *head;
     singlyNode *nextNode;
@@ -73,6 +68,12 @@ void freeLinkedList(singlyNode **head) {
     take note, lower value -> higher priority
 */
 
+/*
+    This function creates a new priority queue. The priority queue is implemented using a singly linked list.
+    Returns a pointer to the newly created priority queue.
+
+    By Aaron Barcelita.
+*/
 PriorityQueue* createPriorityQueue()
 {
     PriorityQueue *priorityQueue = (PriorityQueue*)malloc(sizeof(PriorityQueue));
@@ -84,32 +85,49 @@ PriorityQueue* createPriorityQueue()
     return priorityQueue;
 }
 
+/*
+    This function inserts a new node with the given data into the priority queue in ascending order.
+
+    By Aaron Barcelita.
+*/
 void enqueue (PriorityQueue *priorityQueue, int data) {
      singlyNode *newNode = createNode(data);
-     if (priorityQueue->front == NULL) {
+     if (priorityQueue->front == NULL) { //if the priority queue is empty
             priorityQueue->front = priorityQueue->rear = newNode;
-     } else {
-        if (data < priorityQueue->front->data) {
+     } else { 
+        if (data < priorityQueue->front->data) { //if the data is less than the data in the first node
             newNode->nextNode = priorityQueue->front;
             priorityQueue->front = newNode;
-        } else {
+        } else { //else, find the correct position to insert the new node by traversing the priority queue
             singlyNode *temp = priorityQueue->front;
             while (temp->nextNode != NULL && temp->nextNode->data < data) {
                 temp = temp->nextNode;
             }
             newNode->nextNode = temp->nextNode;
             temp->nextNode = newNode;
-            if (newNode->nextNode == NULL) {
+            if (newNode->nextNode == NULL) { //if the new node is inserted at the end
                 priorityQueue->rear = newNode;
             }
         }
      }
 }
 
+/*
+    This function checks if the priority queue is empty.
+    Returns true if the priority queue is empty, false otherwise.
+
+    By Aaron Barcelita.
+*/
 bool isEmptyQueue(PriorityQueue *priorityQueue) {
     return priorityQueue->front == NULL;
 }
 
+/*
+    This function removes the node at the front of the priority queue.
+    Returns the data of the removed node.
+
+    By Aaron Barcelita.
+*/
 int dequeue(PriorityQueue *priorityQueue) {
     if (isEmptyQueue(priorityQueue)) {
         printf("Priority Queue is empty. Nothing to dequeue.\n");
@@ -123,6 +141,11 @@ int dequeue(PriorityQueue *priorityQueue) {
     }
 }
 
+/*
+    This function returns the data of the node at the front of the priority queue.
+
+    By Aaron Barcelita.
+*/
 int peek(PriorityQueue *priorityQueue) {
     if (isEmptyQueue(priorityQueue)) {
         printf("Queue is empty. Nothing to peek.\n");
@@ -132,6 +155,11 @@ int peek(PriorityQueue *priorityQueue) {
     }
 }
 
+/*
+    This function frees the memory allocated for the priority queue. Doing free(PriorityQueue) is not enough.
+
+    By Aaron Barcelita.
+*/
 void freePriorityQueue(PriorityQueue *priorityQueue) {
     if (priorityQueue != NULL) {
         singlyNode *current = priorityQueue->front;
@@ -147,7 +175,10 @@ void freePriorityQueue(PriorityQueue *priorityQueue) {
 }
 
 /*
-    Stack Implementation
+    This function creates a new stack. The stack is implemented using a singly linked list.
+    Returns a pointer to the newly created stack.
+
+    By Aaron Barcelita.
 */
 Stack* createStack() {
     Stack *stack = (Stack*)malloc(sizeof(Stack));
@@ -159,6 +190,11 @@ Stack* createStack() {
     return stack;
 }
 
+/*
+    This function pushes a new node with the given data onto the stack.
+
+    By Aaron Barcelita.
+*/
 void push(Stack *stack, int data) {
     singlyNode* newNode = createNode(data);
     if (newNode == NULL) {
@@ -170,10 +206,22 @@ void push(Stack *stack, int data) {
     stack->top = newNode;
 }
 
+/*
+    This function checks if the stack is empty.
+    Returns true if the stack is empty, false otherwise.
+
+    By Aaron Barcelita.
+*/
 bool isEmptyStack(Stack *stack) {
     return stack->top == NULL;
 }
 
+/*
+    This function removes the node at the top of the stack.
+    Returns the data of the removed node.
+
+    By Aaron Barcelita.
+*/
 int pop(Stack *stack) {
     if(isEmptyStack(stack)) {
         printf("Stack is empty. Nothing to pop.\n");
@@ -187,6 +235,11 @@ int pop(Stack *stack) {
     }
 }
 
+/*
+    This function returns the data of the node at the top of the stack.
+
+    By Aaron Barcelita.
+*/
 int peekStack(Stack *stack) {
     if (isEmptyStack(stack)) {
         printf("Stack is empty. Nothing to peek.\n");
@@ -195,7 +248,11 @@ int peekStack(Stack *stack) {
     return stack->top->data;
 }
 
+/*
+    This function frees the memory allocated for the stack. Doing free(Stack) is not enough.
 
+    By Aaron Barcelita.
+*/
 void freeStack(Stack *stack) {
     while(!isEmptyStack(stack)) {
         pop(stack);

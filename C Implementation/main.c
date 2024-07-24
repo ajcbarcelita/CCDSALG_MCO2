@@ -14,29 +14,36 @@ int main()
     int menuChoice = 0, graphChoice = 0, searchChoice = 0;
     char fileString[500]; //the file path or file name of the .txt file containing the social graph data
     bool fileFound = false; 
+    singlyNode** adjList = NULL;
     bool** adjMatrix = NULL;
     FILE *fp;
 
     /*
         This part of the code asks for the file path or file name of the .txt file containing the social graph data.
-        It only considers the scenarios whether if the file is not found, OR if the file is found and IS of valid format.
-        Using a .txt file of invalid format will not be considered in this part of the code, and will therefore lead to undefined behavior.
-    */
+        It checks first if file exists, then also checks if the file is of valid format, i.e, first line contains two integers.
+
+        By Aaron Barcelita.
+    */ 
     while (fileFound == false) {
         printf("\n\t=== LOAD GRAPH DATA===\n");
         printf("Please indicate the ABSOLUTE file path or file name of the .txt file containing the social graph data.\n");
         printf("If entering the file name, please ensure that the file is in the same directory as the program.\n");
         printf("Enter the file path or file name: ");
         fgets(fileString, 500, stdin);
-        fileString[strcspn(fileString, "\n")] = '\0';
-        fp = fopen(fileString, "r");
-        if (fp == NULL) {
+        fileString[strcspn(fileString, "\n")] = '\0'; //removes the newline character at the end of the string
+        fp = fopen(fileString, "r"); 
+        if (fp == NULL) { //if file does not exist
             printf("File not found. Please try again.\n");
         } else {
-            printf("File found. Now loading...\n");
-            fileFound = true;
-        // remove the extra closing brace
-    }
+           if (fscanf(fp, "%d %d", &numVertices, &numEdges) == 2) { //if the first line contains two integers
+                fileFound = true;
+                printf("File found and is also valid.\n");
+                fclose(fp);
+            } else {
+                printf("Invalid file format. Please try again.\n");
+                fclose(fp);
+            }
+        }
 
     /*
         This part of the code asks the user to choose the format of the social graph.
@@ -55,16 +62,20 @@ int main()
         printf("[2] Adjacency Matrix.\n");
         printf("Enter your choice: ");
         scanf("%d", &graphChoice);
+        while (getchar() != '\n');
         
         switch(graphChoice) {
             case 1:
                 printf("Adjacency List selected.\n");
                 //create the adj list
+                adjList = loadAdjacencyList(fileString, &numVertices, &numEdges);
+                printf("Adjacency List created.\n");
                 break;
             case 2:
                 printf("Adjacency Matrix selected.\n");
                 //create the adj matrix
                 adjMatrix = loadAdjMatrix(fileString, &numVertices, &numEdges);
+                printf("Adjacency Matrix created.\n");
                 break;
             default:
                 printf("Invalid choice. Please try again.\n");
@@ -83,15 +94,16 @@ int main()
         printf("[3] Exit.\n");
         printf("Enter your choice: ");
         scanf("%d", &menuChoice);
+        while (getchar() != '\n');
 
         switch(menuChoice) {
             case 1:
                 printf("Enter the ID of the person whose friend list you want to display: ");
                 scanf("%d", &ID1);
                 if (graphChoice == 1) {
-                    printf("WIP"); //printFriendList(adjList, numVertices, ID1);
+                    printFriendList_AdjList(adjList, numVertices, ID1);
                 } else if (graphChoice == 2) {
-                    printFriendList(adjMatrix, numVertices, ID1);
+                    printFriendList_adjMatrix(adjMatrix, numVertices, ID1);
                 }
                 break;
 
@@ -100,16 +112,40 @@ int main()
                 scanf("%d", &ID1);
                 printf("Enter ID 2: ");
                 scanf("%d", &ID2);
-                printf("Choose a search method to be executed: \n");
+                printf("\nChoose a search method to be executed: \n");
                 printf("[1] Breadth First Search.\n");
                 printf("[2] Depth First Search.\n");
                 printf("Enter your choice: ");
                 scanf("%d", &searchChoice);
                 if (graphChoice == 1) {
-
+                    if (searchChoice == 1) {
+                        printf("\nPerforming Breadth First Search on the graph (adjacency list)...\n");
+                        int* path = findConnections_BFS_AdjList(adjList, numVertices, ID1, ID2, &pathLength);
+                        if (path == NULL) {
+                            printf("No connection found between ID %d and ID %d.\n", ID1, ID2);
+                        } else {
+                            printf("Connection found between ID %d and ID %d.\n", ID1, ID2);
+                            for (i = 0; i < pathLength - 1; i++) {
+                                printf("%d is friends with %d\n", path[i], path[i + 1]);
+                            }
+                            printf("\n");
+                        } 
+                    } else if (searchChoice == 2) {
+                        printf("\nPerforming Depth First Search on the graph (adjacency list)...\n");
+                        int* path = findConnections_DFS_AdjList(adjList, numVertices, ID1, ID2, &pathLength);
+                        if (path == NULL) {
+                            printf("No connection found between ID %d and ID %d.\n", ID1, ID2);
+                        } else {
+                            printf("Connection found between ID %d and ID %d.\n", ID1, ID2);
+                            for (i = 0; i < pathLength - 1; i++) {
+                                printf("%d is friends with %d\n", path[i], path[i + 1]);
+                            }
+                            printf("\n");
+                        }
+                    }
                 } else if (graphChoice == 2) {
                     if (searchChoice == 1) {
-                        printf("Performing Breadth First Search on the graph (adjacency matrix)...\n");
+                        printf("\nPerforming Breadth First Search on the graph (adjacency matrix)...\n");
                         int* path = findConnections_BFS_AdjMatrix(adjMatrix, numVertices, ID1, ID2, &pathLength);
                         if (path == NULL) {
                             printf("No connection found between ID %d and ID %d.\n", ID1, ID2);
@@ -121,7 +157,7 @@ int main()
                             printf("\n");
                         } 
                     } else if (searchChoice == 2) {
-                        printf("Performing Depth First Search on the graph (adjacency matrix)...\n");
+                        printf("\nPerforming Depth First Search on the graph (adjacency matrix)...\n");
                         int* path = findConnections_DFS_AdjMatrix(adjMatrix, numVertices, ID1, ID2, &pathLength);
                         if (path == NULL) {
                             printf("No connection found between ID %d and ID %d.\n", ID1, ID2);
