@@ -1,5 +1,6 @@
 import networkx as nx
-import AdjacencyList, AdjacencyMatrix
+from AdjacencyList import AdjacencyList
+from AdjacencyMatrix import AdjacencyMatrix
 import matplotlib.pyplot as plt
 
 def main():
@@ -30,8 +31,12 @@ def main():
         print("\n\t==== CHOOSING A GRAPH FORMAT ====\n")
         print("Please choose the format of the social graph.")
         print("[1] Adjacency List.")
-        print("[2] Matrix.\n")
-        graph_choice = int(input("Enter choice: "))#is this fine? or do we still have to implement a try catch
+        print("[2] Adjacency Matrix.\n")
+        try:
+            graph_choice = int(input("Enter choice: "))
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+            continue
 
         if graph_choice == 1:
             adjacency_list = AdjacencyList()
@@ -93,7 +98,7 @@ def main():
 
             if graph_choice == 1:
                 if search_choice == 1:
-                    print("\nPerforming BFS on the graph from %d to %d...\n", ID1, ID2)
+                    print(f"\nPerforming BFS on the graph from {ID1} to {ID2}...\n")
                     connection = adjacency_list.find_connections_bfs(ID1, ID2)
                     if connection: #if connection has any value
                         print(f"A connection from IDs {ID1} to {ID2} EXISTS!")
@@ -104,7 +109,7 @@ def main():
                         
                         
                 elif search_choice == 2:
-                    print("\nPerforming DFS on the graph from %d to %d...\n", ID1, ID2)
+                    print(f"\nPerforming DFS on the graph from {ID1} to {ID2}...\n")
                     connection = adjacency_list.find_connections_dfs(ID1, ID2)
                     if connection: #if connection has any value
                         print(f"A connection from IDs {ID1} to {ID2} EXISTS!")
@@ -125,8 +130,8 @@ def main():
                         print(f"No connection from IDs {ID1} to {ID2}.")
                         
                 elif search_choice == 2:
-                    print("\nPerforming DFS on the graph from %d to %d...\n", ID1, ID2)
-                    connection = adjacency_list.find_connections_dfs(ID1, ID2)
+                    print(f"\nPerforming DFS on the graph from {ID1} to {ID2}...\n")
+                    connection = adjacency_matrix.find_connections_dfs(ID1, ID2)
                     if connection: #if connection has any value
                         print(f"A connection from IDs {ID1} to {ID2} EXISTS!")
                         for i in range(len(connection) - 1):#loop for each connection

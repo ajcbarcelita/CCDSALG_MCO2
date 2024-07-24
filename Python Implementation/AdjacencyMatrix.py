@@ -112,15 +112,16 @@ class AdjacencyMatrix:
             If no path is found, returns an empty list.
         """
          # Validate ID inputs
-        if ID1 < 0 or ID1 >= self.get_num_vertices or ID2 < 0 or ID2 >= self.get_num_vertices or ID1 == ID2:
-            print(f"Invalid ID/s. The range of an ID should be from 0 to {self.get_num_vertices - 1} inclusive.\nThe two IDs should also not be the same.\n\n")
+        
+        if ID1 < 0 or ID1 >= (self.get_num_vertices()) or ID2 < 0 or ID2 >= (self.get_num_vertices()) or ID1 == ID2:
+            print(f"Invalid ID/s. The range of an ID should be from 0 to {(self.get_num_vertices()) - 1} inclusive.\nThe two IDs should also not be the same.\n\n")
             return None
 
         connection_found = False
         priority_queue = []  # List used as a queue
         
-        visited_vertices = [False] * self.get_num_vertices  # Keeps track of visited vertices
-        parent = [-1] * self.get_num_vertices  # Keeps track of the parent of each vertex
+        visited_vertices = [False] * self.get_num_vertices()  # Keeps track of visited vertices
+        parent = [-1] * self.get_num_vertices()  # Keeps track of the parent of each vertex
         
         #heappush = (list, (priority, node))
         heapq.heappush(priority_queue, (0, ID1))  # Use heapq to push the initial node with priority 0
