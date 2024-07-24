@@ -1,6 +1,6 @@
 import networkx as nx
-import AdjacencyList, AdjacencyMatrix
-import matplotlib.pyplot as plt
+from AdjacencyList import AdjacencyList
+from AdjacencyMatrix import AdjacencyMatrix
 
 def main():
     file_found = False
@@ -36,9 +36,11 @@ def main():
         if graph_choice == 1:
             adjacency_list = AdjacencyList()
             adjacency_list.load_from_file(file_string)
+            adjacency_list.print_adjacency_list()
         elif graph_choice == 2:
             adjacency_matrix = AdjacencyMatrix()
             adjacency_matrix.load_from_file(file_string)
+            adjacency_matrix.print_adjacency_matrix()
         else:
             print("Invalid choice. Please try again.")
 
