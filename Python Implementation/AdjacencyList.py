@@ -40,7 +40,7 @@ class AdjacencyList:
             bool: True if there is an edge between i and j, False otherwise.
         """
         #has edge is already a function in networkx
-        return self.graph.has_edge(i, j)
+        return self.graph.has_edge(i, j) and self.graph.has_edge(j, i)
     
     def load_from_file(self, file_string):
         """

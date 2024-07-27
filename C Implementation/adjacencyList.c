@@ -313,3 +313,11 @@ int* findConnections_DFS_AdjList(singlyNode** adjList, int numVertices, int ID1,
     freeStack(stack);
     return path;
 }
+
+void freeAdjacencyList(singlyNode** adjList, int numVertices) {
+    for (int i = 0; i < numVertices; i++) {
+        freeLinkedList(&adjList[i]); //check data_structures.c for the implementation of freeLinkedList
+    }
+    free(adjList);
+    printf("Memory dynamically allocated for the adjacency list and its contents has been freed.\n");
+}

@@ -1,7 +1,5 @@
 #include "data_structures.h"
 
-//implement a linked list and only the functions I need
-
 /*
     This function creates a new singly linked list node with the given data. However, this is not inserted into the linked list yet.
     Returns a pointer to the newly created node.

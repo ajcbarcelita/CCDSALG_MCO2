@@ -308,4 +308,13 @@ int* findConnections_DFS_AdjMatrix(bool** adjMatrix, int numVertices, int ID1, i
     freeStack(stack);
     return path; //return the path
 }
-    
+
+void freeAdjMatrix(bool** adjMatrix, int numVertices)
+{
+    int i;
+    for (i = 0; i < numVertices; i++) { //this method of freeing is due to how I allocated the memory for the adjacency matrix in loadAdjMatrix
+        free(adjMatrix[i]);
+    }
+    free(adjMatrix);
+    printf("Memory dynamically allocated for the adjacency matrix and its contents has been freed.\n");
+}  

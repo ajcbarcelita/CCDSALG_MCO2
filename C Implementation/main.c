@@ -173,6 +173,11 @@ int main()
                 break;
 
             case 3:
+                if (graphChoice == 1) {
+                    freeAdjacencyList(adjList, numVertices);
+                } else if (graphChoice == 2) {
+                    freeAdjMatrix(adjMatrix, numVertices);
+                }
                 printf("Exiting program...\n");
                 break;
             
