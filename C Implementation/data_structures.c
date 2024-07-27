@@ -19,22 +19,19 @@ singlyNode* createNode (int data) {
 }
 
 /*
-    This function inserts a new node with the given data into a linked list in ascending order.
+    This function inserts a new node with the given data into a linked list at its end.
 
     By Aaron Barcelita.
 */
-void insertInAscendingOrder(singlyNode **head, int data) {
+void insertAtEnd(singlyNode** head, int data) {
     singlyNode *newNode = createNode(data);
-    if (*head == NULL || (*head)->data >= data) {  //if linked list is empty or the data is less than the data in the first node
-        newNode->nextNode = *head;
+    if (*head == NULL) { //if linked list is empty
         *head = newNode;
-    } else { //else, find the correct position to insert the new node by traversing the linked list
+    } else {
         singlyNode *temp = *head;
-        while (temp->nextNode != NULL && temp->nextNode->data < data) { //stop traversing when the next node is NULL or the next node's data is greater than the data to be inserted
+        while (temp->nextNode != NULL) { //traverse to the last node
             temp = temp->nextNode;
         }
-        //insert the new node after 
-        newNode->nextNode = temp->nextNode;
         temp->nextNode = newNode;
     }
 }
@@ -88,26 +85,25 @@ PriorityQueue* createPriorityQueue()
 
     By Aaron Barcelita.
 */
-void enqueue (PriorityQueue *priorityQueue, int data) {
-     singlyNode *newNode = createNode(data);
-     if (priorityQueue->front == NULL) { //if the priority queue is empty
-            priorityQueue->front = priorityQueue->rear = newNode;
-     } else { 
-        if (data < priorityQueue->front->data) { //if the data is less than the data in the first node
-            newNode->nextNode = priorityQueue->front;
-            priorityQueue->front = newNode;
-        } else { //else, find the correct position to insert the new node by traversing the priority queue
-            singlyNode *temp = priorityQueue->front;
-            while (temp->nextNode != NULL && temp->nextNode->data < data) {
-                temp = temp->nextNode;
-            }
-            newNode->nextNode = temp->nextNode;
-            temp->nextNode = newNode;
-            if (newNode->nextNode == NULL) { //if the new node is inserted at the end
-                priorityQueue->rear = newNode;
-            }
+void enqueue(PriorityQueue *priorityQueue, int data) {
+    singlyNode *newNode = createNode(data);
+    
+    if (priorityQueue->front == NULL) { // if the priority queue is empty
+        priorityQueue->front = priorityQueue->rear = newNode;
+    } else if (data < priorityQueue->front->data) { // if the data is less than the data in the first node
+        newNode->nextNode = priorityQueue->front;
+        priorityQueue->front = newNode;
+    } else if (data >= priorityQueue->rear->data) { // if the data is greater than or equal to the data in the last node
+        priorityQueue->rear->nextNode = newNode;
+        priorityQueue->rear = newNode;
+    } else { // find the correct position to insert the new node
+        singlyNode *temp = priorityQueue->front;
+        while (temp->nextNode != NULL && temp->nextNode->data < data) {
+            temp = temp->nextNode;
         }
-     }
+        newNode->nextNode = temp->nextNode;
+        temp->nextNode = newNode;
+    }
 }
 
 /*

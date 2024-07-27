@@ -11,7 +11,6 @@ class AdjacencyList:
     by Aaron Go
     """
     
-    
     #constructor
     def __init__(self):
         """

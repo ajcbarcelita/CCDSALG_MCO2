@@ -11,6 +11,7 @@ class AdjacencyMatrix:
     
     by Aaron Go
     """
+    
     def __init__(self):
         """
         Initializes an empty graph using NetworkX.
