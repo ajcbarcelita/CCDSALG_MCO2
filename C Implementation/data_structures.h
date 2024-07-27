@@ -28,7 +28,6 @@ void freeLinkedList(singlyNode **head);
 PriorityQueue* createPriorityQueue();
 void enqueue(PriorityQueue *priorityQueue, int data);
 bool isEmptyQueue(PriorityQueue *priorityQueue);
-int peek(PriorityQueue *priorityQueue);
 int dequeue(PriorityQueue *priorityQueue);
 void freePriorityQueue(PriorityQueue *priorityQueue);
 
@@ -36,7 +35,6 @@ void freePriorityQueue(PriorityQueue *priorityQueue);
 Stack* createStack();
 void push(Stack *stack, int data);
 int pop(Stack *stack);
-int peekStack(Stack *stack);
 bool isEmptyStack(Stack *stack);
 void freeStack(Stack *stack);
 

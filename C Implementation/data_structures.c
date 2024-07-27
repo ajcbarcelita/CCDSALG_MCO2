@@ -136,20 +136,6 @@ int dequeue(PriorityQueue *priorityQueue) {
 }
 
 /*
-    This function returns the data of the node at the front of the priority queue.
-
-    By Aaron Barcelita.
-*/
-int peek(PriorityQueue *priorityQueue) {
-    if (isEmptyQueue(priorityQueue)) {
-        printf("Queue is empty. Nothing to peek.\n");
-        return -1;
-    } else {
-        return priorityQueue->front->data;
-    }
-}
-
-/*
     This function frees the memory allocated for the priority queue. Doing free(PriorityQueue) is not enough.
 
     By Aaron Barcelita.
@@ -227,19 +213,6 @@ int pop(Stack *stack) {
         free(temp);
         return data;
     }
-}
-
-/*
-    This function returns the data of the node at the top of the stack.
-
-    By Aaron Barcelita.
-*/
-int peekStack(Stack *stack) {
-    if (isEmptyStack(stack)) {
-        printf("Stack is empty. Nothing to peek.\n");
-        return -1;
-    }
-    return stack->top->data;
 }
 
 /*
