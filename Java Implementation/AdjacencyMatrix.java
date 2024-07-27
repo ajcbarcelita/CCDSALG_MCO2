@@ -2,13 +2,11 @@ import java.util.*;
 import java.io.*;
 
 public class AdjacencyMatrix extends Graph {
-    private boolean adjacencyMatrix[][];
-    private int numVertices;
-    private int numEdges; //num of edges according to file
+    private boolean adjacencyMatrix[][]; // adjacency matrix of the graph is represented as a 2D boolean array
     
     // Constructor
     public AdjacencyMatrix() {
-        super();
+        super(); //calls the constructor of the Graph class
         this.adjacencyMatrix = null;
     }
 

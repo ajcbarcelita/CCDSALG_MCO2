@@ -2,11 +2,11 @@ import java.util.*;
 import java.io.*; 
 
 public class AdjacencyList extends Graph {
-    private ArrayList<ArrayList<Integer>> adjacencyList;
+    private ArrayList<ArrayList<Integer>> adjacencyList; // adjacency list of the graph is represented as an arraylist of arraylists
     
     // Constructor
     public AdjacencyList(){
-        super(); //calls the constructor of the parent class
+        super(); //calls the constructor of the Graph class
         this.adjacencyList = null;
     }
 
