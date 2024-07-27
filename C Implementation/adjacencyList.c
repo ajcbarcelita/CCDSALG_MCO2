@@ -41,7 +41,7 @@ singlyNode** loadAdjacencyList(char *fileString, int *numVertices, int *numEdges
 
     //read the edges
     while (fscanf(fp, "%d %d", &ID1, &ID2) == 2) {
-        insertInAscendingOrder(&adjList[ID1], ID2); //check data_structures.c for the implementation of insertInAscendingOrder
+        insertAtEnd(&adjList[ID1], ID2); //check data_structures.c for the implementation of insertAtEnd
     }
 
     fclose(fp);
@@ -91,7 +91,7 @@ void printAdjList(singlyNode** adjList, int numVertices) {
     singlyNode *temp;
     for (i = 0; i < numVertices; i++) {
         temp = adjList[i];
-        printf("Vertex %d: ", i);
+        printf("%d: ", i);
         while (temp != NULL) {
             printf("%d ", temp->data);
             temp = temp->nextNode;

@@ -70,12 +70,14 @@ int main()
                 //create the adj list
                 adjList = loadAdjacencyList(fileString, &numVertices, &numEdges);
                 printf("Adjacency List created.\n");
+                // printAdjList(adjList, numVertices);
                 break;
             case 2:
                 printf("Adjacency Matrix selected.\n");
                 //create the adj matrix
                 adjMatrix = loadAdjMatrix(fileString, &numVertices, &numEdges);
                 printf("Adjacency Matrix created.\n");
+                // printAdjMatrix(adjMatrix, numVertices);
                 break;
             default:
                 printf("Invalid choice. Please try again.\n");
