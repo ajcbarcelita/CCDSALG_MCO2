@@ -1,4 +1,5 @@
 import networkx as nx
+import numpy as np
 import heapq
 
 class AdjacencyMatrix:
@@ -13,9 +14,10 @@ class AdjacencyMatrix:
     """
     def __init__(self):
         """
-        Initializes an empty graph using NetworkX.
+        Initializes an empty graph using NetworkX, and prepares an adjacency matrix.
         """
         self.graph = nx.Graph()
+        self.adj_matrix = None
     
     def get_num_vertices(self):
         """
@@ -25,20 +27,7 @@ class AdjacencyMatrix:
             int: Number of nodes in the graph.
         """
         return self.graph.number_of_nodes()
-
-    def has_edge(self, i, j):
-        """
-        Checks if there is an edge between vertices i and j.
-
-        Args:
-            i (int): The first vertex.
-            j (int): The second vertex.
-
-        Returns:
-            bool: True if there is an edge between i and j, False otherwise.
-        """
-        return self.graph.has_edge(i, j) and self.graph.has_edge(j, i)
-
+    
     def load_from_file(self, file_string):
         """
         Loads the graph from a file. The file should contain
@@ -63,6 +52,7 @@ class AdjacencyMatrix:
                 self.graph.add_edge(i, j)#and lastly adds an edge between the two
             
             print(f"File loaded successfully. List Graph has {num_vertices} vertices and {num_edges} edges.")
+            self.adj_matrix = nx.adjacency_matrix(self.graph).todense() #turn graph into adj matrix, then use numpy to turn it into a dense graph(less complex)
         except FileNotFoundError:
             print(f"File not found: {file_string}")
         finally:
@@ -70,28 +60,26 @@ class AdjacencyMatrix:
             
     def print_adjacency_matrix(self):
         """
-        Prints the adjacency matrix of the graph. Each cell (i, j)
-        in the matrix contains 1 if there is an edge between vertices
-        i and j, and 0 otherwise.
+        Checks if adjacency matrix is available, then
+        Prints the adjacency matrix of the graph by using networkx's built-in adjacency matrix
         """
         
+        if self.adj_matrix is None:
+            print("Adjacency matrix is not available. Please load the graph first.")
+            return
+
         print("\n\t==== ADJACENCY MATRIX ====\n")
-        for i in range(self.get_num_vertices()):
-            for j in range(self.get_num_vertices()):
-                if self.graph.has_edge(i, j):
-                    print("1 ", end="")# to make it so that it ends with a space rather than a new line
-                else:
-                    print("0 ", end="")
-            print()
+        print(self.adj_matrix)
 
     def print_friend_list(self, ID1):
         """
+        Checks if adj matrix is avail, then
         Prints the list of friends (neighbors) for a given vertex ID.
 
         Args:
             ID1 (int): The ID of the vertex for which to print the friend list.
         """
-        friends = list(self.graph.neighbors(ID1))
+        friends = [j for j in range(self.get_num_vertices()) if self.adj_matrix[ID1, j] == 1]#iterates through the range of vertices(0 to numvertices-1), and if theres an edge, add it to friends 
         print(f"\n\t==== {ID1}'s FRIEND LIST ====\n")
         for friend in friends:
             print(friend)
@@ -137,7 +125,7 @@ class AdjacencyMatrix:
                 break
             #go through all neighboring vertices
             for neighbor in range(self.get_num_vertices()):
-                if self.graph.has_edge(current_vertex, neighbor) and not visited_vertices[neighbor]:
+                if self.adj_matrix[current_vertex, neighbor] == 1 and not visited_vertices[neighbor]:
                     visited_vertices[neighbor] = True
                     parent[neighbor] = current_vertex
                     heapq.heappush(priority_queue, (neighbor, neighbor))  # Push the neighbor with its value as priority
@@ -187,8 +175,8 @@ class AdjacencyMatrix:
                 connection_found = True
                 break
 
-            for neighbor in self.graph.neighbors(current_vertex):
-                if not visited_vertices[neighbor]:
+            for neighbor in range(self.get_num_vertices()):#more elaborate way to not use graph
+                if self.adj_matrix[current_vertex, neighbor] == 1 and not visited_vertices[neighbor]:
                     visited_vertices[neighbor] = True
                     parent[neighbor] = current_vertex
                     stack.append(neighbor)
