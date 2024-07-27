@@ -314,6 +314,13 @@ int* findConnections_DFS_AdjList(singlyNode** adjList, int numVertices, int ID1,
     return path;
 }
 
+/*
+    This functions allows us to free the memory dynamically allocated for the adjacency list and its contents.
+    Doing so would help prevent memory leaks. Even though memory for this is freed after program termination, this is
+    still considered as a good practice.
+
+    By Aaron Barcelita.
+*/
 void freeAdjacencyList(singlyNode** adjList, int numVertices) {
     for (int i = 0; i < numVertices; i++) {
         freeLinkedList(&adjList[i]); //check data_structures.c for the implementation of freeLinkedList

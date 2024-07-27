@@ -309,6 +309,11 @@ int* findConnections_DFS_AdjMatrix(bool** adjMatrix, int numVertices, int ID1, i
     return path; //return the path
 }
 
+/*
+    This functions allows us to free the memory dynamically allocated for the adjacency matrix and its contents to prevent memory leaks.
+
+    By Aaron Barcelita.
+*/
 void freeAdjMatrix(bool** adjMatrix, int numVertices)
 {
     int i;
