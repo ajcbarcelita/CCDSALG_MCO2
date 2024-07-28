@@ -179,7 +179,7 @@ public class AdjacencyList extends Graph {
 
         int i, currentVertex;
         boolean connectionFound = false;
-        Stack<Integer> stack = new Stack<>(); // stores the vertices to be visited next
+        Deque<Integer> stack = new ArrayDeque<>(); // stores the vertices to be visited next, uses deque since more modern vs stack class
         boolean visitedVertices[] = new boolean[this.numVertices]; // keeps track of visited vertices
         int[] parent = new int[this.numVertices]; // keeps track of the parent of each vertex
         Arrays.fill(parent, -1); // initialize all elements of parent to -1 since at the start, we do not know yet the parent of each vertex

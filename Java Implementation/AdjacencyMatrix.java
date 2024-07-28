@@ -184,7 +184,7 @@ public class AdjacencyMatrix extends Graph {
 
         int i, currentVertex;
         boolean connectionFound = false;
-        Stack<Integer> stack = new Stack<>(); // using a stack to keep track of vertices 
+        Deque<Integer> stack = new ArrayDeque<>(); // using a stack to keep track of vertices 
         boolean visitedVertices[] = new boolean[this.numVertices]; // keeps track of visited vertices
         int[] parent = new int[this.numVertices]; // keeps track of the parent of each vertex
         Arrays.fill(parent, -1); // initialize all elements of parent to -1 since at the start, we do not know yet the parent of each vertex
