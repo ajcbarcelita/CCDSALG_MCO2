@@ -29,6 +29,20 @@ class AdjacencyMatrix:
         """
         return self.graph.number_of_nodes()
     
+    def has_edge(self, i, j):
+        """
+        Checks if there is an edge between vertices i and j.
+
+        Args:
+            i (int): The first vertex.
+            j (int): The second vertex.
+
+        Returns:
+            bool: True if there is an edge between i and j, False otherwise.
+        """
+        #has edge is already a function in networkx
+        return self.adj_matrix[i,j]
+    
     def load_from_file(self, file_string):
         """
         Loads the graph from a file. The file should contain
@@ -100,7 +114,7 @@ class AdjacencyMatrix:
             list: A list of vertex IDs representing the path from ID1 to ID2.
             If no path is found, returns an empty list.
         """
-         # Validate ID inputs
+         # Validate ID inputs 
         
         if ID1 < 0 or ID1 >= (self.get_num_vertices()) or ID2 < 0 or ID2 >= (self.get_num_vertices()) or ID1 == ID2:
             print(f"Invalid ID/s. The range of an ID should be from 0 to {(self.get_num_vertices()) - 1} inclusive.\nThe two IDs should also not be the same.\n\n")
@@ -124,12 +138,13 @@ class AdjacencyMatrix:
             if current_vertex == ID2:
                 connection_found = True
                 break
-            #go through all neighboring vertices
+            
+                    
             for neighbor in range(self.get_num_vertices()):
-                if self.adj_matrix[current_vertex, neighbor] == 1 and not visited_vertices[neighbor]:
+                if self.graph.has_edge(current_vertex, neighbor) and not visited_vertices[neighbor]:
                     visited_vertices[neighbor] = True
                     parent[neighbor] = current_vertex
-                    heapq.heappush(priority_queue, (neighbor, neighbor))  # Push the neighbor with its value as priority
+                    heapq.heappush(priority_queue, (neighbor, neighbor))
 
         # If no connection is found between ID1 and ID2, display an error message
         if not connection_found:
